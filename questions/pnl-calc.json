@@ -1,0 +1,610 @@
+[
+  {
+    "id": "pnl-001",
+    "type": "pnl-calc",
+    "phase": 1,
+    "difficulty": 1,
+    "badge": "선물 기초",
+    "question": "원유 선물 1계약을 100달러에 매수했습니다. 만기 시 원유 가격이 115달러일 때, 손익은 얼마인가요?",
+    "position": {
+      "type": "futures-long",
+      "entry": 100,
+      "spot_min": 70,
+      "spot_max": 130
+    },
+    "spot": 115,
+    "answer": 15,
+    "explanation": "선물 매수(Long) 포지션의 손익은 만기 가격에서 진입 가격을 뺀 값입니다. 115 - 100 = 15달러의 이익이 발생합니다.",
+    "formula": "선물 매수 P&L = S_T - F_0\n= 115 - 100\n= 15 (이익)",
+    "source": "Hull Ch.2, p.38"
+  },
+  {
+    "id": "pnl-002",
+    "type": "pnl-calc",
+    "phase": 1,
+    "difficulty": 1,
+    "badge": "선물 기초",
+    "question": "금 선물 1계약을 110달러에 매수했습니다. 만기 시 금 가격이 95달러일 때, 손익은 얼마인가요?",
+    "position": {
+      "type": "futures-long",
+      "entry": 110,
+      "spot_min": 75,
+      "spot_max": 140
+    },
+    "spot": 95,
+    "answer": -15,
+    "explanation": "만기 가격(95)이 진입 가격(110)보다 낮으므로, 선물 매수 포지션에서 15달러 손실이 발생합니다.",
+    "formula": "선물 매수 P&L = S_T - F_0\n= 95 - 110\n= -15 (손실)",
+    "source": "Hull Ch.2, p.38"
+  },
+  {
+    "id": "pnl-003",
+    "type": "pnl-calc",
+    "phase": 1,
+    "difficulty": 1,
+    "badge": "선물 기초",
+    "question": "대두 선물 1계약을 120달러에 매도했습니다. 만기 시 대두 가격이 100달러일 때, 손익은 얼마인가요?",
+    "position": {
+      "type": "futures-short",
+      "entry": 120,
+      "spot_min": 80,
+      "spot_max": 150
+    },
+    "spot": 100,
+    "answer": 20,
+    "explanation": "선물 매도(Short) 포지션에서 가격이 하락하면 이익입니다. 진입 가격(120)에서 만기 가격(100)을 빼면 20달러 이익입니다.",
+    "formula": "선물 매도 P&L = F_0 - S_T\n= 120 - 100\n= 20 (이익)",
+    "source": "Hull Ch.2, p.38"
+  },
+  {
+    "id": "pnl-004",
+    "type": "pnl-calc",
+    "phase": 1,
+    "difficulty": 1,
+    "badge": "선물 기초",
+    "question": "KOSPI200 선물을 350pt에 매도했습니다. 만기 시 KOSPI200이 370pt일 때, 손익은 얼마인가요?",
+    "position": {
+      "type": "futures-short",
+      "entry": 350,
+      "spot_min": 300,
+      "spot_max": 400
+    },
+    "spot": 370,
+    "answer": -20,
+    "explanation": "선물 매도 포지션에서 가격이 상승하면 손실입니다. 350 - 370 = -20pt 손실이 발생합니다.",
+    "formula": "선물 매도 P&L = F_0 - S_T\n= 350 - 370\n= -20 (손실)",
+    "source": "Hull Ch.2, p.38"
+  },
+  {
+    "id": "pnl-005",
+    "type": "pnl-calc",
+    "phase": 1,
+    "difficulty": 1,
+    "badge": "콜옵션 기초",
+    "question": "행사가 100원, 프리미엄 5원인 콜옵션을 매수했습니다. 만기 시 기초자산 가격이 120원일 때, 손익은 얼마인가요?",
+    "position": {
+      "type": "call-long",
+      "strike": 100,
+      "premium": 5,
+      "spot_min": 70,
+      "spot_max": 130
+    },
+    "spot": 120,
+    "answer": 15,
+    "explanation": "콜옵션이 내가격(ITM)입니다. 만기 시 행사가치 max(120-100, 0) = 20원에서 프리미엄 5원을 차감하면 15원 이익입니다.",
+    "formula": "콜옵션 매수 P&L = max(S_T - K, 0) - c\n= max(120 - 100, 0) - 5\n= 20 - 5\n= 15 (이익)",
+    "source": "Hull Ch.9, p.206"
+  },
+  {
+    "id": "pnl-006",
+    "type": "pnl-calc",
+    "phase": 1,
+    "difficulty": 1,
+    "badge": "콜옵션 기초",
+    "question": "행사가 110원, 프리미엄 8원인 콜옵션을 매수했습니다. 만기 시 기초자산 가격이 90원일 때, 손익은 얼마인가요?",
+    "position": {
+      "type": "call-long",
+      "strike": 110,
+      "premium": 8,
+      "spot_min": 65,
+      "spot_max": 140
+    },
+    "spot": 90,
+    "answer": -8,
+    "explanation": "만기 가격(90)이 행사가(110) 이하이므로 콜옵션은 외가격(OTM)입니다. 행사가치는 0이고, 지불한 프리미엄 8원만큼 손실됩니다.",
+    "formula": "콜옵션 매수 P&L = max(S_T - K, 0) - c\n= max(90 - 110, 0) - 8\n= 0 - 8\n= -8 (손실: 프리미엄 전액)",
+    "source": "Hull Ch.9, p.206"
+  },
+  {
+    "id": "pnl-007",
+    "type": "pnl-calc",
+    "phase": 1,
+    "difficulty": 1,
+    "badge": "콜옵션 기초",
+    "question": "행사가 100원, 프리미엄 7원인 콜옵션을 매수했습니다. 만기 시 기초자산 가격이 100원(행사가와 동일)일 때, 손익은 얼마인가요?",
+    "position": {
+      "type": "call-long",
+      "strike": 100,
+      "premium": 7,
+      "spot_min": 70,
+      "spot_max": 130
+    },
+    "spot": 100,
+    "answer": -7,
+    "explanation": "만기 가격이 행사가와 정확히 같은 등가격(ATM)입니다. 행사가치는 max(100-100, 0) = 0이고, 프리미엄 7원이 손실됩니다.",
+    "formula": "콜옵션 매수 P&L = max(S_T - K, 0) - c\n= max(100 - 100, 0) - 7\n= 0 - 7\n= -7 (손실: 프리미엄 전액)",
+    "source": "Hull Ch.9, p.206"
+  },
+  {
+    "id": "pnl-008",
+    "type": "pnl-calc",
+    "phase": 1,
+    "difficulty": 1,
+    "badge": "풋옵션 기초",
+    "question": "행사가 100원, 프리미엄 5원인 풋옵션을 매수했습니다. 만기 시 기초자산 가격이 80원일 때, 손익은 얼마인가요?",
+    "position": {
+      "type": "put-long",
+      "strike": 100,
+      "premium": 5,
+      "spot_min": 60,
+      "spot_max": 130
+    },
+    "spot": 80,
+    "answer": 15,
+    "explanation": "풋옵션이 내가격(ITM)입니다. 행사가치 max(100-80, 0) = 20원에서 프리미엄 5원을 차감하면 15원 이익입니다.",
+    "formula": "풋옵션 매수 P&L = max(K - S_T, 0) - p\n= max(100 - 80, 0) - 5\n= 20 - 5\n= 15 (이익)",
+    "source": "Hull Ch.9, p.208"
+  },
+  {
+    "id": "pnl-009",
+    "type": "pnl-calc",
+    "phase": 1,
+    "difficulty": 1,
+    "badge": "풋옵션 기초",
+    "question": "행사가 105원, 프리미엄 6원인 풋옵션을 매수했습니다. 만기 시 기초자산 가격이 120원일 때, 손익은 얼마인가요?",
+    "position": {
+      "type": "put-long",
+      "strike": 105,
+      "premium": 6,
+      "spot_min": 75,
+      "spot_max": 140
+    },
+    "spot": 120,
+    "answer": -6,
+    "explanation": "만기 가격(120)이 행사가(105)보다 높으므로 풋옵션은 외가격(OTM)입니다. 행사가치는 0이고, 프리미엄 6원만큼 손실됩니다.",
+    "formula": "풋옵션 매수 P&L = max(K - S_T, 0) - p\n= max(105 - 120, 0) - 6\n= 0 - 6\n= -6 (손실: 프리미엄 전액)",
+    "source": "Hull Ch.9, p.208"
+  },
+  {
+    "id": "pnl-010",
+    "type": "pnl-calc",
+    "phase": 1,
+    "difficulty": 1,
+    "badge": "풋옵션 기초",
+    "question": "행사가 110원, 프리미엄 10원인 풋옵션을 매수했습니다. 만기 시 기초자산 가격이 110원(행사가와 동일)일 때, 손익은 얼마인가요?",
+    "position": {
+      "type": "put-long",
+      "strike": 110,
+      "premium": 10,
+      "spot_min": 80,
+      "spot_max": 140
+    },
+    "spot": 110,
+    "answer": -10,
+    "explanation": "만기 가격이 행사가와 같은 등가격(ATM)입니다. 행사가치 max(110-110, 0) = 0이므로, 프리미엄 10원이 전액 손실됩니다.",
+    "formula": "풋옵션 매수 P&L = max(K - S_T, 0) - p\n= max(110 - 110, 0) - 10\n= 0 - 10\n= -10 (손실: 프리미엄 전액)",
+    "source": "Hull Ch.9, p.208"
+  },
+  {
+    "id": "pnl-011",
+    "type": "pnl-calc",
+    "phase": 1,
+    "difficulty": 2,
+    "badge": "옵션 매도",
+    "question": "행사가 100원, 프리미엄 5원인 콜옵션을 매도했습니다. 만기 시 기초자산 가격이 120원일 때, 손익은 얼마인가요?",
+    "position": {
+      "type": "call-short",
+      "strike": 100,
+      "premium": 5,
+      "spot_min": 70,
+      "spot_max": 140
+    },
+    "spot": 120,
+    "answer": -15,
+    "explanation": "콜옵션 매도자는 매수자와 반대 손익을 가집니다. 수취한 프리미엄 5원에서 행사가치 max(120-100, 0) = 20원을 차감하면 -15원 손실입니다.",
+    "formula": "콜옵션 매도 P&L = c - max(S_T - K, 0)\n= 5 - max(120 - 100, 0)\n= 5 - 20\n= -15 (손실)",
+    "source": "Hull Ch.9, p.207"
+  },
+  {
+    "id": "pnl-012",
+    "type": "pnl-calc",
+    "phase": 1,
+    "difficulty": 2,
+    "badge": "옵션 매도",
+    "question": "행사가 110원, 프리미엄 8원인 콜옵션을 매도했습니다. 만기 시 기초자산 가격이 105원일 때, 손익은 얼마인가요?",
+    "position": {
+      "type": "call-short",
+      "strike": 110,
+      "premium": 8,
+      "spot_min": 80,
+      "spot_max": 140
+    },
+    "spot": 105,
+    "answer": 8,
+    "explanation": "만기 가격(105)이 행사가(110) 이하이므로 콜옵션은 행사되지 않습니다. 매도자는 수취한 프리미엄 8원을 전액 이익으로 확보합니다.",
+    "formula": "콜옵션 매도 P&L = c - max(S_T - K, 0)\n= 8 - max(105 - 110, 0)\n= 8 - 0\n= 8 (이익: 프리미엄 전액)",
+    "source": "Hull Ch.9, p.207"
+  },
+  {
+    "id": "pnl-013",
+    "type": "pnl-calc",
+    "phase": 1,
+    "difficulty": 2,
+    "badge": "옵션 매도",
+    "question": "행사가 105원, 프리미엄 7원인 콜옵션을 매도했습니다. 만기 시 기초자산 가격이 115원일 때, 손익은 얼마인가요?",
+    "position": {
+      "type": "call-short",
+      "strike": 105,
+      "premium": 7,
+      "spot_min": 75,
+      "spot_max": 135
+    },
+    "spot": 115,
+    "answer": -3,
+    "explanation": "콜옵션이 행사되어 행사가치 max(115-105, 0) = 10원이 발생합니다. 프리미엄 7원을 수취했으므로 순 손실은 7 - 10 = -3원입니다.",
+    "formula": "콜옵션 매도 P&L = c - max(S_T - K, 0)\n= 7 - max(115 - 105, 0)\n= 7 - 10\n= -3 (손실)",
+    "source": "Hull Ch.9, p.207"
+  },
+  {
+    "id": "pnl-014",
+    "type": "pnl-calc",
+    "phase": 1,
+    "difficulty": 2,
+    "badge": "옵션 매도",
+    "question": "행사가 100원, 프리미엄 6원인 풋옵션을 매도했습니다. 만기 시 기초자산 가격이 85원일 때, 손익은 얼마인가요?",
+    "position": {
+      "type": "put-short",
+      "strike": 100,
+      "premium": 6,
+      "spot_min": 60,
+      "spot_max": 130
+    },
+    "spot": 85,
+    "answer": -9,
+    "explanation": "풋옵션이 행사되어 행사가치 max(100-85, 0) = 15원이 발생합니다. 프리미엄 6원을 수취했으므로 순 손실은 6 - 15 = -9원입니다.",
+    "formula": "풋옵션 매도 P&L = p - max(K - S_T, 0)\n= 6 - max(100 - 85, 0)\n= 6 - 15\n= -9 (손실)",
+    "source": "Hull Ch.9, p.209"
+  },
+  {
+    "id": "pnl-015",
+    "type": "pnl-calc",
+    "phase": 1,
+    "difficulty": 2,
+    "badge": "옵션 매도",
+    "question": "행사가 110원, 프리미엄 10원인 풋옵션을 매도했습니다. 만기 시 기초자산 가격이 115원일 때, 손익은 얼마인가요?",
+    "position": {
+      "type": "put-short",
+      "strike": 110,
+      "premium": 10,
+      "spot_min": 80,
+      "spot_max": 140
+    },
+    "spot": 115,
+    "answer": 10,
+    "explanation": "만기 가격(115)이 행사가(110)보다 높으므로 풋옵션은 행사되지 않습니다. 매도자는 수취한 프리미엄 10원을 전액 이익으로 확보합니다.",
+    "formula": "풋옵션 매도 P&L = p - max(K - S_T, 0)\n= 10 - max(110 - 115, 0)\n= 10 - 0\n= 10 (이익: 프리미엄 전액)",
+    "source": "Hull Ch.9, p.209"
+  },
+  {
+    "id": "pnl-016",
+    "type": "pnl-calc",
+    "phase": 1,
+    "difficulty": 2,
+    "badge": "옵션 매도",
+    "question": "행사가 95원, 프리미엄 5원인 풋옵션을 매도했습니다. 만기 시 기초자산 가격이 88원일 때, 손익은 얼마인가요?",
+    "position": {
+      "type": "put-short",
+      "strike": 95,
+      "premium": 5,
+      "spot_min": 65,
+      "spot_max": 125
+    },
+    "spot": 88,
+    "answer": -2,
+    "explanation": "풋옵션이 행사되어 행사가치 max(95-88, 0) = 7원이 발생합니다. 프리미엄 5원을 수취했으므로 순 손실은 5 - 7 = -2원입니다.",
+    "formula": "풋옵션 매도 P&L = p - max(K - S_T, 0)\n= 5 - max(95 - 88, 0)\n= 5 - 7\n= -2 (손실)",
+    "source": "Hull Ch.9, p.209"
+  },
+  {
+    "id": "pnl-017",
+    "type": "pnl-calc",
+    "phase": 1,
+    "difficulty": 2,
+    "badge": "선물 응용",
+    "question": "KOSPI200 선물을 350pt에 매수했습니다. 만기 시 KOSPI200이 380pt일 때, 손익은 얼마인가요?",
+    "position": {
+      "type": "futures-long",
+      "entry": 350,
+      "spot_min": 300,
+      "spot_max": 400
+    },
+    "spot": 380,
+    "answer": 30,
+    "explanation": "선물 매수 포지션에서 가격이 상승하면 이익입니다. 380 - 350 = 30pt 이익이 발생합니다.",
+    "formula": "선물 매수 P&L = S_T - F_0\n= 380 - 350\n= 30 (이익)",
+    "source": "Hull Ch.2, p.38"
+  },
+  {
+    "id": "pnl-018",
+    "type": "pnl-calc",
+    "phase": 1,
+    "difficulty": 2,
+    "badge": "선물 응용",
+    "question": "S&P500 선물을 350pt에 매도했습니다. 만기 시 S&P500이 325pt일 때, 손익은 얼마인가요?",
+    "position": {
+      "type": "futures-short",
+      "entry": 350,
+      "spot_min": 280,
+      "spot_max": 420
+    },
+    "spot": 325,
+    "answer": 25,
+    "explanation": "선물 매도 포지션에서 가격이 하락하면 이익입니다. 350 - 325 = 25pt 이익이 발생합니다.",
+    "formula": "선물 매도 P&L = F_0 - S_T\n= 350 - 325\n= 25 (이익)",
+    "source": "Hull Ch.2, p.38"
+  },
+  {
+    "id": "pnl-019",
+    "type": "pnl-calc",
+    "phase": 1,
+    "difficulty": 2,
+    "badge": "옵션 정밀",
+    "question": "행사가 105원, 프리미엄 3원인 콜옵션을 매수했습니다. 만기 시 기초자산 가격이 112원일 때, 손익은 얼마인가요?",
+    "position": {
+      "type": "call-long",
+      "strike": 105,
+      "premium": 3,
+      "spot_min": 80,
+      "spot_max": 135
+    },
+    "spot": 112,
+    "answer": 4,
+    "explanation": "콜옵션이 내가격(ITM)입니다. 행사가치 max(112-105, 0) = 7원에서 프리미엄 3원을 차감하면 4원 이익입니다.",
+    "formula": "콜옵션 매수 P&L = max(S_T - K, 0) - c\n= max(112 - 105, 0) - 3\n= 7 - 3\n= 4 (이익)",
+    "source": "Hull Ch.9, p.206"
+  },
+  {
+    "id": "pnl-020",
+    "type": "pnl-calc",
+    "phase": 1,
+    "difficulty": 2,
+    "badge": "옵션 정밀",
+    "question": "행사가 100원, 프리미엄 8원인 풋옵션을 매수했습니다. 만기 시 기초자산 가격이 95원일 때, 손익은 얼마인가요?",
+    "position": {
+      "type": "put-long",
+      "strike": 100,
+      "premium": 8,
+      "spot_min": 65,
+      "spot_max": 130
+    },
+    "spot": 95,
+    "answer": -3,
+    "explanation": "풋옵션이 내가격(ITM)이지만 행사가치(5원)가 프리미엄(8원)보다 작습니다. max(100-95, 0) - 8 = 5 - 8 = -3원 손실입니다.",
+    "formula": "풋옵션 매수 P&L = max(K - S_T, 0) - p\n= max(100 - 95, 0) - 8\n= 5 - 8\n= -3 (손실)",
+    "source": "Hull Ch.9, p.208"
+  },
+  {
+    "id": "pnl-021",
+    "type": "pnl-calc",
+    "phase": 1,
+    "difficulty": 3,
+    "badge": "조합 전략",
+    "question": "커버드콜 전략: 주식을 100원에 매수하고, 행사가 110원 콜옵션을 매도하여 프리미엄 5원을 수취했습니다. 만기 시 주가가 120원일 때, 손익은 얼마인가요?",
+    "position": {
+      "type": "covered-call",
+      "entry_stock": 100,
+      "strike": 110,
+      "premium_received": 5,
+      "spot_min": 70,
+      "spot_max": 140
+    },
+    "spot": 120,
+    "answer": 15,
+    "explanation": "주식 이익 (120-100)=20원, 수취 프리미엄 5원, 콜옵션 행사 의무 max(120-110,0)=10원. 순 손익 = 20 + 5 - 10 = 15원입니다. 커버드콜에서 최대 이익은 행사가-매수가+프리미엄 = 15원으로 제한됩니다.",
+    "formula": "커버드콜 P&L = (S_T - S_0) + c - max(S_T - K, 0)\n= (120 - 100) + 5 - max(120 - 110, 0)\n= 20 + 5 - 10\n= 15 (이익)",
+    "source": "Hull Ch.10, p.234"
+  },
+  {
+    "id": "pnl-022",
+    "type": "pnl-calc",
+    "phase": 1,
+    "difficulty": 3,
+    "badge": "조합 전략",
+    "question": "커버드콜 전략: 주식을 105원에 매수하고, 행사가 115원 콜옵션을 매도하여 프리미엄 6원을 수취했습니다. 만기 시 주가가 100원일 때, 손익은 얼마인가요?",
+    "position": {
+      "type": "covered-call",
+      "entry_stock": 105,
+      "strike": 115,
+      "premium_received": 6,
+      "spot_min": 75,
+      "spot_max": 145
+    },
+    "spot": 100,
+    "answer": 1,
+    "explanation": "주식 손실 (100-105)=-5원, 수취 프리미엄 6원, 콜옵션 미행사(100<115). 순 손익 = -5 + 6 - 0 = 1원 소폭 이익입니다. 프리미엄이 주가 하락 일부를 상쇄합니다.",
+    "formula": "커버드콜 P&L = (S_T - S_0) + c - max(S_T - K, 0)\n= (100 - 105) + 6 - max(100 - 115, 0)\n= -5 + 6 - 0\n= 1 (이익)",
+    "source": "Hull Ch.10, p.234"
+  },
+  {
+    "id": "pnl-023",
+    "type": "pnl-calc",
+    "phase": 1,
+    "difficulty": 3,
+    "badge": "조합 전략",
+    "question": "보호적 풋 전략: 주식을 100원에 매수하고, 행사가 95원 풋옵션을 4원에 매수했습니다. 만기 시 주가가 80원일 때, 손익은 얼마인가요?",
+    "position": {
+      "type": "protective-put",
+      "entry_stock": 100,
+      "strike": 95,
+      "premium_paid": 4,
+      "spot_min": 60,
+      "spot_max": 130
+    },
+    "spot": 80,
+    "answer": -9,
+    "explanation": "주식 손실 (80-100)=-20원, 풋옵션 행사가치 max(95-80,0)=15원, 프리미엄 -4원. 순 손익 = -20 - 4 + 15 = -9원. 풋옵션이 하락 손실을 제한합니다(최대 손실 = 95-100-4 = -9원).",
+    "formula": "보호적 풋 P&L = (S_T - S_0) - p + max(K - S_T, 0)\n= (80 - 100) - 4 + max(95 - 80, 0)\n= -20 - 4 + 15\n= -9 (손실: 최대 손실)",
+    "source": "Hull Ch.10, p.234"
+  },
+  {
+    "id": "pnl-024",
+    "type": "pnl-calc",
+    "phase": 1,
+    "difficulty": 3,
+    "badge": "조합 전략",
+    "question": "보호적 풋 전략: 주식을 110원에 매수하고, 행사가 105원 풋옵션을 5원에 매수했습니다. 만기 시 주가가 125원일 때, 손익은 얼마인가요?",
+    "position": {
+      "type": "protective-put",
+      "entry_stock": 110,
+      "strike": 105,
+      "premium_paid": 5,
+      "spot_min": 80,
+      "spot_max": 145
+    },
+    "spot": 125,
+    "answer": 10,
+    "explanation": "주식 이익 (125-110)=15원, 풋옵션 미행사(125>105, 가치 0), 프리미엄 -5원. 순 손익 = 15 - 5 + 0 = 10원입니다.",
+    "formula": "보호적 풋 P&L = (S_T - S_0) - p + max(K - S_T, 0)\n= (125 - 110) - 5 + max(105 - 125, 0)\n= 15 - 5 + 0\n= 10 (이익)",
+    "source": "Hull Ch.10, p.234"
+  },
+  {
+    "id": "pnl-025",
+    "type": "pnl-calc",
+    "phase": 1,
+    "difficulty": 3,
+    "badge": "조합 전략",
+    "question": "강세 콜 스프레드(Bull Call Spread): 행사가 100원 콜옵션을 8원에 매수하고, 행사가 110원 콜옵션을 3원에 매도했습니다. 만기 시 기초자산 가격이 115원일 때, 손익은 얼마인가요?",
+    "position": {
+      "type": "bull-call-spread",
+      "strike1": 100,
+      "strike2": 110,
+      "premium1": 8,
+      "premium2": 3,
+      "spot_min": 75,
+      "spot_max": 135
+    },
+    "spot": 115,
+    "answer": 5,
+    "explanation": "매수 콜 행사가치 max(115-100,0)=15원, 매도 콜 행사가치 max(115-110,0)=5원. 순 프리미엄 8-3=5원. P&L = 15 - 8 - 5 + 3 = 5원입니다. 최대 이익(K2-K1-순비용=10-5=5원) 도달.",
+    "formula": "Bull Call Spread P&L = max(S_T-K1,0) - c1 - max(S_T-K2,0) + c2\n= max(115-100,0) - 8 - max(115-110,0) + 3\n= 15 - 8 - 5 + 3\n= 5 (이익: 최대)",
+    "source": "Hull Ch.10, p.236"
+  },
+  {
+    "id": "pnl-026",
+    "type": "pnl-calc",
+    "phase": 1,
+    "difficulty": 3,
+    "badge": "조합 전략",
+    "question": "강세 콜 스프레드(Bull Call Spread): 행사가 95원 콜옵션을 10원에 매수하고, 행사가 105원 콜옵션을 4원에 매도했습니다. 만기 시 기초자산 가격이 90원일 때, 손익은 얼마인가요?",
+    "position": {
+      "type": "bull-call-spread",
+      "strike1": 95,
+      "strike2": 105,
+      "premium1": 10,
+      "premium2": 4,
+      "spot_min": 70,
+      "spot_max": 130
+    },
+    "spot": 90,
+    "answer": -6,
+    "explanation": "두 콜옵션 모두 외가격(OTM)이므로 행사가치는 0입니다. 순 프리미엄 비용 10-4=6원이 최대 손실로 확정됩니다.",
+    "formula": "Bull Call Spread P&L = max(S_T-K1,0) - c1 - max(S_T-K2,0) + c2\n= max(90-95,0) - 10 - max(90-105,0) + 4\n= 0 - 10 - 0 + 4\n= -6 (손실: 최대)",
+    "source": "Hull Ch.10, p.236"
+  },
+  {
+    "id": "pnl-027",
+    "type": "pnl-calc",
+    "phase": 1,
+    "difficulty": 3,
+    "badge": "조합 전략",
+    "question": "약세 풋 스프레드(Bear Put Spread): 행사가 90원 풋옵션을 2원에 매도하고, 행사가 100원 풋옵션을 7원에 매수했습니다. 만기 시 기초자산 가격이 85원일 때, 손익은 얼마인가요?",
+    "position": {
+      "type": "bear-put-spread",
+      "strike1": 90,
+      "strike2": 100,
+      "premium1": 2,
+      "premium2": 7,
+      "spot_min": 65,
+      "spot_max": 125
+    },
+    "spot": 85,
+    "answer": 5,
+    "explanation": "매수 풋(K2=100) 행사가치 max(100-85,0)=15원, 매도 풋(K1=90) 행사가치 max(90-85,0)=5원. P&L = 15 - 7 - 5 + 2 = 5원입니다. 최대 이익(K2-K1-순비용=10-5=5원) 도달.",
+    "formula": "Bear Put Spread P&L = max(K2-S_T,0) - p2 - max(K1-S_T,0) + p1\n= max(100-85,0) - 7 - max(90-85,0) + 2\n= 15 - 7 - 5 + 2\n= 5 (이익: 최대)",
+    "source": "Hull Ch.10, p.238"
+  },
+  {
+    "id": "pnl-028",
+    "type": "pnl-calc",
+    "phase": 1,
+    "difficulty": 3,
+    "badge": "조합 전략",
+    "question": "약세 풋 스프레드(Bear Put Spread): 행사가 95원 풋옵션을 3원에 매도하고, 행사가 105원 풋옵션을 8원에 매수했습니다. 만기 시 기초자산 가격이 110원일 때, 손익은 얼마인가요?",
+    "position": {
+      "type": "bear-put-spread",
+      "strike1": 95,
+      "strike2": 105,
+      "premium1": 3,
+      "premium2": 8,
+      "spot_min": 70,
+      "spot_max": 130
+    },
+    "spot": 110,
+    "answer": -5,
+    "explanation": "두 풋옵션 모두 외가격(OTM)이므로 행사가치는 0입니다. 순 프리미엄 비용 8-3=5원이 최대 손실로 확정됩니다.",
+    "formula": "Bear Put Spread P&L = max(K2-S_T,0) - p2 - max(K1-S_T,0) + p1\n= max(105-110,0) - 8 - max(95-110,0) + 3\n= 0 - 8 - 0 + 3\n= -5 (손실: 최대)",
+    "source": "Hull Ch.10, p.238"
+  },
+  {
+    "id": "pnl-029",
+    "type": "pnl-calc",
+    "phase": 1,
+    "difficulty": 3,
+    "badge": "조합 전략",
+    "question": "롱 스트래들(Long Straddle): 행사가 100원인 콜옵션(프리미엄 5원)과 풋옵션(프리미엄 4원)을 동시에 매수했습니다. 만기 시 기초자산 가격이 120원일 때, 손익은 얼마인가요?",
+    "position": {
+      "type": "straddle-long",
+      "strike": 100,
+      "call_premium": 5,
+      "put_premium": 4,
+      "spot_min": 70,
+      "spot_max": 130
+    },
+    "spot": 120,
+    "answer": 11,
+    "explanation": "콜옵션 행사가치 max(120-100,0)=20원, 풋옵션 미행사(가치 0). 총 프리미엄 5+4=9원. P&L = 20 - 5 + 0 - 4 = 11원 이익입니다.",
+    "formula": "Long Straddle P&L = max(S_T-K,0) - c + max(K-S_T,0) - p\n= max(120-100,0) - 5 + max(100-120,0) - 4\n= 20 - 5 + 0 - 4\n= 11 (이익)",
+    "source": "Hull Ch.10, p.244"
+  },
+  {
+    "id": "pnl-030",
+    "type": "pnl-calc",
+    "phase": 1,
+    "difficulty": 3,
+    "badge": "조합 전략",
+    "question": "롱 스트래들(Long Straddle): 행사가 100원인 콜옵션(프리미엄 7원)과 풋옵션(프리미엄 6원)을 동시에 매수했습니다. 만기 시 기초자산 가격이 100원(행사가와 동일)일 때, 손익은 얼마인가요?",
+    "position": {
+      "type": "straddle-long",
+      "strike": 100,
+      "call_premium": 7,
+      "put_premium": 6,
+      "spot_min": 65,
+      "spot_max": 135
+    },
+    "spot": 100,
+    "answer": -13,
+    "explanation": "만기 가격이 행사가와 같아 콜과 풋 모두 행사가치가 0입니다. 양쪽 프리미엄 합계 7+6=13원이 최대 손실로 확정됩니다. 스트래들은 가격이 크게 움직여야 이익이 발생합니다.",
+    "formula": "Long Straddle P&L = max(S_T-K,0) - c + max(K-S_T,0) - p\n= max(100-100,0) - 7 + max(100-100,0) - 6\n= 0 - 7 + 0 - 6\n= -13 (손실: 최대)",
+    "source": "Hull Ch.10, p.244"
+  }
+]

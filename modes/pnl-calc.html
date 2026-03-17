@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>P&L 계산기</title>
+<link rel="stylesheet" href="../css/style.css">
+<style>
+  /* 넘패드 */
+  .numpad {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  }
+  .numpad-display {
+    font-size: 32px;
+    font-weight: 900;
+    text-align: center;
+    color: var(--primary);
+    padding: 10px;
+    background: var(--bg);
+    border-radius: var(--radius-sm);
+    margin-bottom: 10px;
+    min-height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'SF Mono', 'Consolas', monospace;
+  }
+  .numpad-display.negative { color: var(--loss); }
+  .numpad-display.positive { color: var(--profit); }
+  .numpad-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+  }
+  .numpad-btn {
+    height: 48px;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 20px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.1s;
+    background: var(--bg);
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .numpad-btn:active { transform: scale(0.92); background: var(--border); }
+  .numpad-btn.sign   { background: #fef3c7; color: #92400e; font-size: 16px; }
+  .numpad-btn.del    { background: #fee2e2; color: var(--loss); font-size: 16px; }
+  .numpad-btn.submit { background: var(--primary); color: white; }
+  .numpad-btn.submit:active { background: var(--primary-dark); }
+  .numpad-btn.submit.disabled { opacity: 0.4; pointer-events: none; }
+
+  /* 미니 차트 */
+  .mini-chart {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* 스팟 가격 강조 */
+  .spot-highlight {
+    display: inline-block;
+    font-weight: 800;
+    color: var(--primary);
+    background: #dbeafe;
+    border-radius: 4px;
+    padding: 1px 6px;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- ===== 게임 화면 ===== -->
+  <div id="gameScreen" class="screen active">
+    <div class="game-header">
+      <button class="back-btn" onclick="goHome()">←</button>
+      <span class="round-info" id="roundInfo">1 / 10</span>
+      <span class="score-display" id="scoreDisplay">0점</span>
+    </div>
+
+    <div class="history-bar" id="historyBar"></div>
+
+    <!-- 문제 카드 -->
+    <div class="question-card" id="questionCard">
+      <div class="question-badge" id="questionBadge">P&L 계산</div>
+      <div class="question-text" id="questionText">문제 로딩 중...</div>
+      <div class="question-params" id="questionParams" style="display:none"></div>
+    </div>
+
+    <!-- 미니 페이오프 차트 (힌트) -->
+    <div class="mini-chart" id="miniChart" style="display:none">
+      <canvas id="hintCanvas"></canvas>
+    </div>
+
+    <!-- 넘패드 -->
+    <div class="numpad" id="numpad">
+      <div class="numpad-display" id="numDisplay">?</div>
+      <div class="numpad-grid">
+        <button class="numpad-btn" onclick="numInput('7')">7</button>
+        <button class="numpad-btn" onclick="numInput('8')">8</button>
+        <button class="numpad-btn" onclick="numInput('9')">9</button>
+        <button class="numpad-btn del" onclick="numDelete()">←</button>
+        <button class="numpad-btn" onclick="numInput('4')">4</button>
+        <button class="numpad-btn" onclick="numInput('5')">5</button>
+        <button class="numpad-btn" onclick="numInput('6')">6</button>
+        <button class="numpad-btn sign" onclick="numToggleSign()">±</button>
+        <button class="numpad-btn" onclick="numInput('1')">1</button>
+        <button class="numpad-btn" onclick="numInput('2')">2</button>
+        <button class="numpad-btn" onclick="numInput('3')">3</button>
+        <button class="numpad-btn submit" id="submitBtn" onclick="submitAnswer()">확인</button>
+        <button class="numpad-btn" onclick="numInput('0')" style="grid-column: span 2">0</button>
+        <button class="numpad-btn" onclick="numClear()">C</button>
+      </div>
+    </div>
+
+    <!-- 피드백 -->
+    <div class="feedback" id="feedback">
+      <div class="feedback-stars"   id="feedbackStars"></div>
+      <div class="feedback-message" id="feedbackMessage"></div>
+      <div class="feedback-detail"  id="feedbackDetail"></div>
+      <div class="feedback-formula" id="feedbackFormula" style="display:none"></div>
+    </div>
+
+    <button class="next-btn" id="nextBtn" onclick="nextQuestion()">다음 →</button>
+  </div>
+
+  <!-- ===== 결과 화면 ===== -->
+  <div id="resultScreen" class="screen"></div>
+
+</div>
+
+<script src="../js/common.js"></script>
+<script src="../js/payoff.js"></script>
+<script>
+// ─── 상태 ─────────────────────────────────────────────────
+const level    = getLevelFromURL();
+const engine   = new GameEngine({ totalRounds: 10 });
+const loader   = new QuestionLoader('../questions/pnl-calc.json');
+let   currentQ = null;
+let   answered = false;
+let   inputStr = '';
+let   isNeg    = false;
+
+// ─── 초기화 ───────────────────────────────────────────────
+async function init() {
+  try {
+    await loader.load(level);
+  } catch (e) {
+    document.getElementById('questionText').textContent = '⚠️ 문제를 불러올 수 없습니다.';
+    return;
+  }
+
+  await showOnboarding('pnl-calc', {
+    icon: '💰',
+    title: 'P&L 계산기',
+    text: '포지션과 만기 가격을 보고\n손익을 직접 계산하세요.\n음수(손실)는 ± 버튼을 누르세요.',
+  });
+
+  renderQuestion();
+}
+
+// ─── 넘패드 ───────────────────────────────────────────────
+function numInput(ch) {
+  if (answered) return;
+  if (inputStr.length >= 8) return;
+  inputStr += ch;
+  updateDisplay();
+}
+
+function numDelete() {
+  if (answered) return;
+  inputStr = inputStr.slice(0, -1);
+  if (inputStr === '') isNeg = false;
+  updateDisplay();
+}
+
+function numClear() {
+  if (answered) return;
+  inputStr = '';
+  isNeg = false;
+  updateDisplay();
+}
+
+function numToggleSign() {
+  if (answered) return;
+  isNeg = !isNeg;
+  updateDisplay();
+}
+
+function updateDisplay() {
+  const display = document.getElementById('numDisplay');
+  if (inputStr === '') {
+    display.textContent = '?';
+    display.className = 'numpad-display';
+  } else {
+    const val = (isNeg ? '-' : '') + inputStr;
+    display.textContent = val;
+    display.className = 'numpad-display ' + (isNeg ? 'negative' : 'positive');
+  }
+  // 확인 버튼 활성화
+  document.getElementById('submitBtn').classList.toggle('disabled', inputStr === '');
+}
+
+// ─── 문제 렌더링 ──────────────────────────────────────────
+function renderQuestion() {
+  currentQ = loader.next();
+  answered = false;
+  inputStr = '';
+  isNeg    = false;
+
+  document.getElementById('roundInfo').textContent = `${engine.currentRoundDisplay} / ${engine.totalRounds}`;
+  document.getElementById('scoreDisplay').textContent = `${engine.score}점`;
+  engine.renderHistoryBar(document.getElementById('historyBar'));
+
+  document.getElementById('questionBadge').textContent = currentQ.badge || 'P&L 계산';
+  document.getElementById('questionText').textContent  = currentQ.question;
+
+  // 피드백 숨기기
+  document.getElementById('feedback').classList.remove('show');
+  document.getElementById('feedbackFormula').style.display = 'none';
+  document.getElementById('nextBtn').classList.remove('show');
+
+  // 넘패드 표시, 리셋
+  document.getElementById('numpad').style.display = '';
+  updateDisplay();
+
+  // 미니 차트 (난이도 1에서만 힌트로 표시)
+  const miniChart = document.getElementById('miniChart');
+  if (currentQ.difficulty <= 1 && currentQ.position) {
+    miniChart.style.display = '';
+    const canvas = document.getElementById('hintCanvas');
+    const w = Math.min(document.querySelector('.container').clientWidth - 40, 540);
+    const h = Math.round(w * 0.35);
+    canvas.width  = w;
+    canvas.height = h;
+    requestAnimationFrame(() => {
+      renderPayoffChart(canvas, currentQ.position.type, currentQ.position, {
+        width: w, height: h, showLabels: true, showBEP: true, highlighted: false,
+      });
+    });
+  } else {
+    miniChart.style.display = 'none';
+  }
+}
+
+// ─── 정답 제출 ────────────────────────────────────────────
+function submitAnswer() {
+  if (answered || inputStr === '') return;
+  answered = true;
+
+  const userAnswer = parseInt((isNeg ? '-' : '') + inputStr, 10);
+  const correct    = userAnswer === currentQ.answer;
+
+  const { stars } = engine.recordRound({ correct });
+
+  // 넘패드 색상 변경
+  const display = document.getElementById('numDisplay');
+  if (correct) {
+    display.className = 'numpad-display positive';
+  } else {
+    display.textContent = `${userAnswer} → 정답: ${currentQ.answer}`;
+    display.className = 'numpad-display negative';
+  }
+
+  // 피드백
+  engine.showFeedback({
+    stars,
+    message: correct ? pickMsg('correct') : `정답: ${currentQ.answer}`,
+    detail:  currentQ.explanation || '',
+  });
+
+  if (currentQ.formula) {
+    const fEl = document.getElementById('feedbackFormula');
+    fEl.textContent   = currentQ.formula;
+    fEl.style.display = 'block';
+  }
+
+  engine.renderHistoryBar(document.getElementById('historyBar'));
+  document.getElementById('nextBtn').classList.add('show');
+}
+
+// ─── 다음 문제 ────────────────────────────────────────────
+function nextQuestion() {
+  engine.hideFeedback();
+  if (engine.isComplete) {
+    engine.renderResultScreen({
+      onHome:  goHome,
+      onRetry: () => location.reload(),
+    });
+  } else {
+    renderQuestion();
+  }
+}
+
+init();
+</script>
+</body>
+</html>

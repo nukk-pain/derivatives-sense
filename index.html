@@ -44,11 +44,10 @@
           <div class="mode-title">페이오프 다이어그램</div>
           <div class="mode-desc">손익 그래프 형태를 맞혀요</div>
         </div>
-        <div class="mode-card disabled">
+        <div class="mode-card" onclick="selectMode('pnl-calc')">
           <div class="mode-icon">💰</div>
           <div class="mode-title">P&amp;L 계산기</div>
-          <div class="mode-desc">준비 중</div>
-          <div class="mode-badge">준비 중</div>
+          <div class="mode-desc">손익을 직접 계산해요</div>
         </div>
       </div>
     </div>
@@ -157,6 +156,15 @@ const MODES = {
       { icon: '🌱', name: '쉬움',  desc: '4가지 기본 포지션' },
       { icon: '🌿', name: '보통',  desc: '방향 + 포지션 구분' },
       { icon: '🌳', name: '도전',  desc: '조합 전략' },
+    ],
+  },
+  'pnl-calc': {
+    title: '💰 P&L 계산기',
+    href: 'modes/pnl-calc.html',
+    levels: [
+      { icon: '🌱', name: '쉬움',  desc: '선물 + 단순 옵션 (차트 힌트)' },
+      { icon: '🌿', name: '보통',  desc: '매도 포지션 포함' },
+      { icon: '🌳', name: '도전',  desc: '조합 전략 P&L' },
     ],
   },
 };
