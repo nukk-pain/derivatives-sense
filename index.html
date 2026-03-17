@@ -49,6 +49,11 @@
           <div class="mode-title">P&amp;L 계산기</div>
           <div class="mode-desc">손익을 직접 계산해요</div>
         </div>
+        <div class="mode-card" onclick="selectMode('bep-finder')">
+          <div class="mode-icon">🎯</div>
+          <div class="mode-title">손익분기점 찾기</div>
+          <div class="mode-desc">BEP를 수직선에서 찍어요</div>
+        </div>
       </div>
     </div>
 
@@ -165,6 +170,15 @@ const MODES = {
       { icon: '🌱', name: '쉬움',  desc: '선물 + 단순 옵션 (차트 힌트)' },
       { icon: '🌿', name: '보통',  desc: '매도 포지션 포함' },
       { icon: '🌳', name: '도전',  desc: '조합 전략 P&L' },
+    ],
+  },
+  'bep-finder': {
+    title: '🎯 손익분기점 찾기',
+    href: 'modes/bep-finder.html',
+    levels: [
+      { icon: '🌱', name: '쉬움',  desc: '선물 + 단순 옵션' },
+      { icon: '🌿', name: '보통',  desc: '매도 포지션 포함' },
+      { icon: '🌳', name: '도전',  desc: '조합 전략 BEP' },
     ],
   },
 };

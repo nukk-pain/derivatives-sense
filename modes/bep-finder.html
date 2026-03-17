@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>손익분기점 찾기</title>
+<link rel="stylesheet" href="../css/style.css">
+<style>
+  .number-line-area {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 20px 16px 42px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    touch-action: none;
+    cursor: pointer;
+  }
+  .number-line-container { position: relative; height: 80px; margin: 0 8px; }
+  .number-line {
+    position: absolute; top: 40px; left: 0; right: 0;
+    height: 6px; background: var(--border); border-radius: 3px;
+  }
+  .tick {
+    position: absolute; top: 30px;
+    width: 2px; height: 24px; background: #94a3b8;
+  }
+  .tick-label {
+    position: absolute; top: 60px;
+    font-size: 12px; font-weight: 700; color: var(--text-light);
+    transform: translateX(-50%); white-space: nowrap;
+  }
+  .marker {
+    position: absolute; top: 24px;
+    width: 30px; height: 30px; border-radius: 50%;
+    transform: translateX(-50%); z-index: 10; display: none;
+  }
+  .marker.guess {
+    background: var(--primary);
+    box-shadow: 0 2px 8px rgba(29,78,216,0.4);
+  }
+  .marker.answer {
+    background: var(--profit);
+    box-shadow: 0 2px 8px rgba(22,163,74,0.4);
+  }
+  .marker-label {
+    position: absolute; top: -24px; left: 50%;
+    transform: translateX(-50%);
+    font-size: 11px; font-weight: 800; white-space: nowrap;
+  }
+  .marker.guess .marker-label { color: var(--primary); }
+  .marker.answer .marker-label { color: var(--profit-dark); }
+  .connector-line {
+    position: absolute; top: 37px; height: 4px;
+    border-radius: 2px; z-index: 5; display: none; opacity: 0.4;
+  }
+  .marker.pop { animation: pop 0.3s ease-out; }
+  @keyframes pop {
+    0% { transform: translateX(-50%) scale(0); }
+    70% { transform: translateX(-50%) scale(1.2); }
+    100% { transform: translateX(-50%) scale(1); }
+  }
+
+  /* straddle: 두 번째 BEP 표시용 */
+  .marker.answer2 {
+    background: var(--profit);
+    box-shadow: 0 2px 8px rgba(22,163,74,0.4);
+  }
+  .marker.answer2 .marker-label { color: var(--profit-dark); }
+
+  /* 미니 차트 */
+  .mini-chart {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .confirm-btn {
+    padding: 14px; background: var(--profit); color: white;
+    border: none; border-radius: var(--radius);
+    font-size: 16px; font-weight: 700; cursor: pointer;
+    transition: all 0.15s; min-height: var(--touch);
+    opacity: 0.4; pointer-events: none;
+  }
+  .confirm-btn.ready { opacity: 1; pointer-events: auto; }
+  .confirm-btn:active { transform: scale(0.97); background: var(--profit-dark); }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div id="gameScreen" class="screen active">
+    <div class="game-header">
+      <button class="back-btn" onclick="goHome()">←</button>
+      <span class="round-info" id="roundInfo">1 / 10</span>
+      <span class="score-display" id="scoreDisplay">0점</span>
+    </div>
+
+    <div class="history-bar" id="historyBar"></div>
+
+    <div class="question-card">
+      <div class="question-badge" id="questionBadge">손익분기점</div>
+      <div class="question-text" id="questionText">문제 로딩 중...</div>
+    </div>
+
+    <!-- 미니 페이오프 차트 -->
+    <div class="mini-chart" id="miniChart">
+      <canvas id="hintCanvas"></canvas>
+    </div>
+
+    <!-- 수직선 -->
+    <div class="number-line-area" id="numberLineArea">
+      <div class="instruction" id="instruction">수직선을 탭하여 손익분기점을 찍으세요</div>
+      <div class="number-line-container" id="nlContainer">
+        <div class="number-line"></div>
+        <!-- 틱, 마커는 JS로 생성 -->
+        <div class="marker guess" id="guessMarker">
+          <span class="marker-label" id="guessLabel"></span>
+        </div>
+        <div class="marker answer" id="answerMarker">
+          <span class="marker-label" id="answerLabel"></span>
+        </div>
+        <div class="marker answer answer2" id="answerMarker2" style="display:none">
+          <span class="marker-label" id="answerLabel2"></span>
+        </div>
+        <div class="connector-line" id="connectorLine"></div>
+      </div>
+    </div>
+
+    <button class="confirm-btn" id="confirmBtn" onclick="confirmGuess()">확인</button>
+
+    <div class="feedback" id="feedback">
+      <div class="feedback-stars"   id="feedbackStars"></div>
+      <div class="feedback-message" id="feedbackMessage"></div>
+      <div class="feedback-detail"  id="feedbackDetail"></div>
+      <div class="feedback-formula" id="feedbackFormula" style="display:none"></div>
+    </div>
+
+    <button class="next-btn" id="nextBtn" onclick="nextQuestion()">다음 →</button>
+  </div>
+
+  <div id="resultScreen" class="screen"></div>
+
+</div>
+
+<script src="../js/common.js"></script>
+<script src="../js/payoff.js"></script>
+<script>
+const level  = getLevelFromURL();
+const engine = new GameEngine({ totalRounds: 10 });
+const loader = new QuestionLoader('../questions/bep-finder.json');
+let currentQ  = null;
+let answered  = false;
+let guessVal  = null;
+
+// 수직선 좌표 변환
+let nlLeft, nlRight, rangeMin, rangeMax;
+
+function pxToVal(px) {
+  return rangeMin + (px - nlLeft) / (nlRight - nlLeft) * (rangeMax - rangeMin);
+}
+function valToPx(val) {
+  return nlLeft + (val - rangeMin) / (rangeMax - rangeMin) * (nlRight - nlLeft);
+}
+
+async function init() {
+  try { await loader.load(level); }
+  catch (e) {
+    document.getElementById('questionText').textContent = '⚠️ 문제를 불러올 수 없습니다.';
+    return;
+  }
+
+  await showOnboarding('bep-finder', {
+    icon: '🎯',
+    title: '손익분기점 찾기',
+    text: '페이오프 차트를 보고\n손익이 0이 되는 가격을\n수직선에서 찍으세요!',
+  });
+
+  renderQuestion();
+}
+
+function renderQuestion() {
+  currentQ = loader.next();
+  answered = false;
+  guessVal = null;
+
+  document.getElementById('roundInfo').textContent = `${engine.currentRoundDisplay} / ${engine.totalRounds}`;
+  document.getElementById('scoreDisplay').textContent = `${engine.score}점`;
+  engine.renderHistoryBar(document.getElementById('historyBar'));
+
+  document.getElementById('questionBadge').textContent = currentQ.badge || '손익분기점';
+  document.getElementById('questionText').textContent  = currentQ.question;
+  document.getElementById('instruction').textContent   = '수직선을 탭하여 손익분기점을 찍으세요';
+
+  // 피드백 숨기기
+  document.getElementById('feedback').classList.remove('show');
+  document.getElementById('feedbackFormula').style.display = 'none';
+  document.getElementById('nextBtn').classList.remove('show');
+  document.getElementById('confirmBtn').classList.remove('ready');
+  document.getElementById('confirmBtn').style.display = '';
+
+  // 마커 숨기기
+  document.getElementById('guessMarker').style.display   = 'none';
+  document.getElementById('answerMarker').style.display   = 'none';
+  document.getElementById('answerMarker2').style.display  = 'none';
+  document.getElementById('connectorLine').style.display  = 'none';
+
+  // 미니 차트
+  const canvas = document.getElementById('hintCanvas');
+  const w = Math.min(document.querySelector('.container').clientWidth - 40, 540);
+  const h = Math.round(w * 0.35);
+  canvas.width = w; canvas.height = h;
+  requestAnimationFrame(() => {
+    renderPayoffChart(canvas, currentQ.position.type, currentQ.position, {
+      width: w, height: h, showLabels: true, showBEP: false, highlighted: false,
+    });
+  });
+
+  // 수직선 설정
+  setupNumberLine();
+}
+
+function setupNumberLine() {
+  const container = document.getElementById('nlContainer');
+  const pos = currentQ.position;
+  rangeMin = pos.spot_min;
+  rangeMax = pos.spot_max;
+
+  // 기존 틱 제거
+  container.querySelectorAll('.tick, .tick-label').forEach(el => el.remove());
+
+  // 수직선 영역 계산 (padding 8px 양쪽)
+  nlLeft  = 8;
+  nlRight = container.clientWidth - 8;
+  if (nlRight <= nlLeft) { nlRight = 280; nlLeft = 8; }
+
+  // 틱 생성 (5~7개)
+  const range  = rangeMax - rangeMin;
+  const step   = niceStep(range, 5);
+  const start  = Math.ceil(rangeMin / step) * step;
+
+  for (let v = start; v <= rangeMax; v += step) {
+    const px = valToPx(v);
+    const pct = ((px - nlLeft) / (nlRight - nlLeft)) * 100;
+
+    const tick = document.createElement('div');
+    tick.className = 'tick';
+    tick.style.left = pct + '%';
+    container.appendChild(tick);
+
+    const label = document.createElement('div');
+    label.className = 'tick-label';
+    label.style.left = pct + '%';
+    label.textContent = Math.round(v);
+    container.appendChild(label);
+  }
+}
+
+function niceStep(range, targetTicks) {
+  const rough = range / targetTicks;
+  const mag   = Math.pow(10, Math.floor(Math.log10(rough)));
+  const norm  = rough / mag;
+  if (norm < 1.5) return mag;
+  if (norm < 3)   return 2 * mag;
+  if (norm < 7)   return 5 * mag;
+  return 10 * mag;
+}
+
+// 수직선 터치/클릭 처리
+const nlArea = document.getElementById('numberLineArea');
+nlArea.addEventListener('pointerdown', handlePointer);
+nlArea.addEventListener('pointermove', handlePointer);
+
+function handlePointer(e) {
+  if (answered) return;
+  e.preventDefault();
+
+  const container = document.getElementById('nlContainer');
+  const rect = container.getBoundingClientRect();
+  const x    = e.clientX - rect.left;
+  const val  = pxToVal(x);
+  const clamped = Math.max(rangeMin, Math.min(rangeMax, val));
+
+  guessVal = Math.round(clamped);
+
+  // 마커 표시
+  const marker = document.getElementById('guessMarker');
+  const pct    = ((valToPx(guessVal) - nlLeft) / (nlRight - nlLeft)) * 100;
+  marker.style.left    = pct + '%';
+  marker.style.display = '';
+  document.getElementById('guessLabel').textContent = guessVal;
+
+  document.getElementById('instruction').textContent = `BEP = ${guessVal}`;
+  document.getElementById('confirmBtn').classList.add('ready');
+}
+
+function confirmGuess() {
+  if (answered || guessVal === null) return;
+  answered = true;
+
+  const answers = Array.isArray(currentQ.answer) ? currentQ.answer : [currentQ.answer];
+  const range   = rangeMax - rangeMin;
+
+  // 가장 가까운 BEP와의 오차 계산
+  let minErrorPct = Infinity;
+  let closestBEP  = answers[0];
+  answers.forEach(bep => {
+    const errPct = Math.abs(guessVal - bep) / range * 100;
+    if (errPct < minErrorPct) { minErrorPct = errPct; closestBEP = bep; }
+  });
+
+  // 별 판정: 3% 이내 → 3★, 8% 이내 → 2★, else 1★
+  let stars, msgKey;
+  if (minErrorPct <= 3) {
+    stars = 3; msgKey = 'perfect';
+  } else if (minErrorPct <= 8) {
+    stars = 2; msgKey = 'good';
+  } else {
+    stars = 1; msgKey = 'ok';
+  }
+
+  const points = stars === 3 ? 10 : stars === 2 ? 6 : 2;
+  engine.score += points;
+  engine.history.push({ stars, points, correct: stars === 3 });
+  engine.round++;
+
+  // 정답 마커 표시
+  answers.forEach((bep, i) => {
+    const markerId = i === 0 ? 'answerMarker' : 'answerMarker2';
+    const labelId  = i === 0 ? 'answerLabel'  : 'answerLabel2';
+    const marker = document.getElementById(markerId);
+    const pct = ((valToPx(bep) - nlLeft) / (nlRight - nlLeft)) * 100;
+    marker.style.left    = pct + '%';
+    marker.style.display = '';
+    marker.classList.add('pop');
+    document.getElementById(labelId).textContent = bep;
+  });
+
+  // 오차 연결선 (가장 가까운 BEP까지)
+  const guessPx  = valToPx(guessVal);
+  const answerPx = valToPx(closestBEP);
+  const line     = document.getElementById('connectorLine');
+  const leftPx   = Math.min(guessPx, answerPx);
+  const widthPx  = Math.abs(answerPx - guessPx);
+  const containerW = nlRight - nlLeft;
+  line.style.left    = ((leftPx - nlLeft) / containerW * 100) + '%';
+  line.style.width   = (widthPx / containerW * 100) + '%';
+  line.style.display = '';
+  line.style.background = stars >= 2 ? 'var(--profit)' : 'var(--loss)';
+
+  // 확인 버튼 숨기기
+  document.getElementById('confirmBtn').style.display = 'none';
+
+  // 피드백
+  const bepStr = answers.length > 1 ? answers.join(', ') : answers[0];
+  engine.showFeedback({
+    stars,
+    message: pickMsg(msgKey),
+    detail: `정답: ${bepStr} | 오차: ${minErrorPct.toFixed(1)}%\n${currentQ.explanation}`,
+  });
+  if (currentQ.formula) {
+    const fEl = document.getElementById('feedbackFormula');
+    fEl.textContent   = currentQ.formula;
+    fEl.style.display = 'block';
+  }
+
+  engine.renderHistoryBar(document.getElementById('historyBar'));
+  document.getElementById('nextBtn').classList.add('show');
+}
+
+function nextQuestion() {
+  engine.hideFeedback();
+  // pop 애니메이션 제거
+  document.querySelectorAll('.marker.pop').forEach(m => m.classList.remove('pop'));
+
+  if (engine.isComplete) {
+    engine.renderResultScreen({ onHome: goHome, onRetry: () => location.reload() });
+  } else {
+    renderQuestion();
+  }
+}
+
+init();
+</script>
+</body>
+</html>

@@ -1,0 +1,619 @@
+[
+  {
+    "id": "bep-001",
+    "type": "bep-finder",
+    "phase": 1,
+    "difficulty": 1,
+    "badge": "손익분기점",
+    "question": "원유 선물 1계약을 100달러에 매수했습니다. 손익분기점은?",
+    "position": {
+      "type": "futures-long",
+      "entry": 100,
+      "spot_min": 70,
+      "spot_max": 130
+    },
+    "answer": 100,
+    "tolerance_pct": 3,
+    "explanation": "선물 매수의 손익분기점은 진입 가격 그 자체입니다. 만기 가격이 진입 가격과 같으면 손익이 0입니다.",
+    "formula": "BEP = F₀ = 100",
+    "source": "Hull Ch.2, p.38"
+  },
+  {
+    "id": "bep-002",
+    "type": "bep-finder",
+    "phase": 1,
+    "difficulty": 1,
+    "badge": "손익분기점",
+    "question": "금 선물 1계약을 110달러에 매도했습니다. 손익분기점은?",
+    "position": {
+      "type": "futures-short",
+      "entry": 110,
+      "spot_min": 80,
+      "spot_max": 140
+    },
+    "answer": 110,
+    "tolerance_pct": 3,
+    "explanation": "선물 매도의 손익분기점은 진입 가격 그 자체입니다. 만기 가격이 진입 가격과 같으면 손익이 0입니다.",
+    "formula": "BEP = F₀ = 110",
+    "source": "Hull Ch.2, p.38"
+  },
+  {
+    "id": "bep-003",
+    "type": "bep-finder",
+    "phase": 1,
+    "difficulty": 1,
+    "badge": "손익분기점",
+    "question": "천연가스 선물 1계약을 50달러에 매수했습니다. 손익분기점은?",
+    "position": {
+      "type": "futures-long",
+      "entry": 50,
+      "spot_min": 20,
+      "spot_max": 80
+    },
+    "answer": 50,
+    "tolerance_pct": 3,
+    "explanation": "선물 매수의 손익분기점은 진입 가격 그 자체입니다. 만기 가격이 50달러이면 손익이 0입니다.",
+    "formula": "BEP = F₀ = 50",
+    "source": "Hull Ch.2, p.38"
+  },
+  {
+    "id": "bep-004",
+    "type": "bep-finder",
+    "phase": 1,
+    "difficulty": 1,
+    "badge": "손익분기점",
+    "question": "콜옵션을 매수했습니다. 행사가 100, 프리미엄 5. 손익분기점은?",
+    "position": {
+      "type": "call-long",
+      "strike": 100,
+      "premium": 5,
+      "spot_min": 70,
+      "spot_max": 130
+    },
+    "answer": 105,
+    "tolerance_pct": 3,
+    "explanation": "콜 매수의 손익분기점은 행사가에 프리미엄을 더한 값입니다. 기초자산 가격이 105일 때, 옵션 행사 이익(5)이 프리미엄(5)을 정확히 상쇄합니다.",
+    "formula": "BEP = K + c = 100 + 5 = 105",
+    "source": "Hull Ch.9, p.206"
+  },
+  {
+    "id": "bep-005",
+    "type": "bep-finder",
+    "phase": 1,
+    "difficulty": 1,
+    "badge": "손익분기점",
+    "question": "콜옵션을 매수했습니다. 행사가 200, 프리미엄 10. 손익분기점은?",
+    "position": {
+      "type": "call-long",
+      "strike": 200,
+      "premium": 10,
+      "spot_min": 170,
+      "spot_max": 240
+    },
+    "answer": 210,
+    "tolerance_pct": 3,
+    "explanation": "콜 매수의 손익분기점은 행사가 + 프리미엄입니다. 기초자산 가격이 210일 때, 행사 이익(10)과 프리미엄(10)이 상쇄됩니다.",
+    "formula": "BEP = K + c = 200 + 10 = 210",
+    "source": "Hull Ch.9, p.206"
+  },
+  {
+    "id": "bep-006",
+    "type": "bep-finder",
+    "phase": 1,
+    "difficulty": 1,
+    "badge": "손익분기점",
+    "question": "콜옵션을 매수했습니다. 행사가 50, 프리미엄 5. 손익분기점은?",
+    "position": {
+      "type": "call-long",
+      "strike": 50,
+      "premium": 5,
+      "spot_min": 25,
+      "spot_max": 80
+    },
+    "answer": 55,
+    "tolerance_pct": 3,
+    "explanation": "콜 매수의 손익분기점은 행사가 + 프리미엄입니다. 기초자산 가격이 55일 때, 행사 이익(5)과 프리미엄(5)이 상쇄됩니다.",
+    "formula": "BEP = K + c = 50 + 5 = 55",
+    "source": "Hull Ch.9, p.206"
+  },
+  {
+    "id": "bep-007",
+    "type": "bep-finder",
+    "phase": 1,
+    "difficulty": 1,
+    "badge": "손익분기점",
+    "question": "콜옵션을 매수했습니다. 행사가 300, 프리미엄 20. 손익분기점은?",
+    "position": {
+      "type": "call-long",
+      "strike": 300,
+      "premium": 20,
+      "spot_min": 260,
+      "spot_max": 360
+    },
+    "answer": 320,
+    "tolerance_pct": 3,
+    "explanation": "콜 매수의 손익분기점은 행사가 + 프리미엄입니다. 기초자산 가격이 320일 때, 행사 이익(20)과 프리미엄(20)이 상쇄됩니다.",
+    "formula": "BEP = K + c = 300 + 20 = 320",
+    "source": "Hull Ch.9, p.206"
+  },
+  {
+    "id": "bep-008",
+    "type": "bep-finder",
+    "phase": 1,
+    "difficulty": 1,
+    "badge": "손익분기점",
+    "question": "풋옵션을 매수했습니다. 행사가 100, 프리미엄 5. 손익분기점은?",
+    "position": {
+      "type": "put-long",
+      "strike": 100,
+      "premium": 5,
+      "spot_min": 70,
+      "spot_max": 130
+    },
+    "answer": 95,
+    "tolerance_pct": 3,
+    "explanation": "풋 매수의 손익분기점은 행사가에서 프리미엄을 뺀 값입니다. 기초자산 가격이 95일 때, 옵션 행사 이익(5)이 프리미엄(5)을 정확히 상쇄합니다.",
+    "formula": "BEP = K - p = 100 - 5 = 95",
+    "source": "Hull Ch.9, p.208"
+  },
+  {
+    "id": "bep-009",
+    "type": "bep-finder",
+    "phase": 1,
+    "difficulty": 1,
+    "badge": "손익분기점",
+    "question": "풋옵션을 매수했습니다. 행사가 200, 프리미엄 10. 손익분기점은?",
+    "position": {
+      "type": "put-long",
+      "strike": 200,
+      "premium": 10,
+      "spot_min": 160,
+      "spot_max": 230
+    },
+    "answer": 190,
+    "tolerance_pct": 3,
+    "explanation": "풋 매수의 손익분기점은 행사가 - 프리미엄입니다. 기초자산 가격이 190일 때, 행사 이익(10)과 프리미엄(10)이 상쇄됩니다.",
+    "formula": "BEP = K - p = 200 - 10 = 190",
+    "source": "Hull Ch.9, p.208"
+  },
+  {
+    "id": "bep-010",
+    "type": "bep-finder",
+    "phase": 1,
+    "difficulty": 1,
+    "badge": "손익분기점",
+    "question": "풋옵션을 매수했습니다. 행사가 80, 프리미엄 10. 손익분기점은?",
+    "position": {
+      "type": "put-long",
+      "strike": 80,
+      "premium": 10,
+      "spot_min": 40,
+      "spot_max": 110
+    },
+    "answer": 70,
+    "tolerance_pct": 3,
+    "explanation": "풋 매수의 손익분기점은 행사가 - 프리미엄입니다. 기초자산 가격이 70일 때, 행사 이익(10)과 프리미엄(10)이 상쇄됩니다.",
+    "formula": "BEP = K - p = 80 - 10 = 70",
+    "source": "Hull Ch.9, p.208"
+  },
+  {
+    "id": "bep-011",
+    "type": "bep-finder",
+    "phase": 1,
+    "difficulty": 2,
+    "badge": "손익분기점",
+    "question": "콜옵션을 매도했습니다. 행사가 100, 프리미엄 8. 손익분기점은?",
+    "position": {
+      "type": "call-short",
+      "strike": 100,
+      "premium": 8,
+      "spot_min": 70,
+      "spot_max": 140
+    },
+    "answer": 108,
+    "tolerance_pct": 3,
+    "explanation": "콜 매도의 손익분기점은 콜 매수와 같습니다(행사가 + 프리미엄). 다만 매도자는 이 지점 이상에서 손실이 발생합니다.",
+    "formula": "BEP = K + c = 100 + 8 = 108",
+    "source": "Hull Ch.9, p.207"
+  },
+  {
+    "id": "bep-012",
+    "type": "bep-finder",
+    "phase": 1,
+    "difficulty": 2,
+    "badge": "손익분기점",
+    "question": "콜옵션을 매도했습니다. 행사가 150, 프리미엄 15. 손익분기점은?",
+    "position": {
+      "type": "call-short",
+      "strike": 150,
+      "premium": 15,
+      "spot_min": 110,
+      "spot_max": 200
+    },
+    "answer": 165,
+    "tolerance_pct": 3,
+    "explanation": "콜 매도의 손익분기점은 행사가 + 프리미엄입니다. 기초자산 가격이 165 이상이면 매도자에게 손실이 발생합니다.",
+    "formula": "BEP = K + c = 150 + 15 = 165",
+    "source": "Hull Ch.9, p.207"
+  },
+  {
+    "id": "bep-013",
+    "type": "bep-finder",
+    "phase": 1,
+    "difficulty": 2,
+    "badge": "손익분기점",
+    "question": "콜옵션을 매도했습니다. 행사가 250, 프리미엄 20. 손익분기점은?",
+    "position": {
+      "type": "call-short",
+      "strike": 250,
+      "premium": 20,
+      "spot_min": 210,
+      "spot_max": 310
+    },
+    "answer": 270,
+    "tolerance_pct": 3,
+    "explanation": "콜 매도의 손익분기점은 행사가 + 프리미엄입니다. 기초자산 가격이 270 이상이면 프리미엄 수입을 초과하는 손실이 발생합니다.",
+    "formula": "BEP = K + c = 250 + 20 = 270",
+    "source": "Hull Ch.9, p.207"
+  },
+  {
+    "id": "bep-014",
+    "type": "bep-finder",
+    "phase": 1,
+    "difficulty": 2,
+    "badge": "손익분기점",
+    "question": "풋옵션을 매도했습니다. 행사가 100, 프리미엄 8. 손익분기점은?",
+    "position": {
+      "type": "put-short",
+      "strike": 100,
+      "premium": 8,
+      "spot_min": 60,
+      "spot_max": 130
+    },
+    "answer": 92,
+    "tolerance_pct": 3,
+    "explanation": "풋 매도의 손익분기점은 풋 매수와 같습니다(행사가 - 프리미엄). 다만 매도자는 이 지점 이하에서 손실이 발생합니다.",
+    "formula": "BEP = K - p = 100 - 8 = 92",
+    "source": "Hull Ch.9, p.209"
+  },
+  {
+    "id": "bep-015",
+    "type": "bep-finder",
+    "phase": 1,
+    "difficulty": 2,
+    "badge": "손익분기점",
+    "question": "풋옵션을 매도했습니다. 행사가 150, 프리미엄 15. 손익분기점은?",
+    "position": {
+      "type": "put-short",
+      "strike": 150,
+      "premium": 15,
+      "spot_min": 100,
+      "spot_max": 180
+    },
+    "answer": 135,
+    "tolerance_pct": 3,
+    "explanation": "풋 매도의 손익분기점은 행사가 - 프리미엄입니다. 기초자산 가격이 135 이하이면 매도자에게 손실이 발생합니다.",
+    "formula": "BEP = K - p = 150 - 15 = 135",
+    "source": "Hull Ch.9, p.209"
+  },
+  {
+    "id": "bep-016",
+    "type": "bep-finder",
+    "phase": 1,
+    "difficulty": 2,
+    "badge": "손익분기점",
+    "question": "풋옵션을 매도했습니다. 행사가 250, 프리미엄 20. 손익분기점은?",
+    "position": {
+      "type": "put-short",
+      "strike": 250,
+      "premium": 20,
+      "spot_min": 190,
+      "spot_max": 280
+    },
+    "answer": 230,
+    "tolerance_pct": 3,
+    "explanation": "풋 매도의 손익분기점은 행사가 - 프리미엄입니다. 기초자산 가격이 230 이하이면 프리미엄 수입을 초과하는 손실이 발생합니다.",
+    "formula": "BEP = K - p = 250 - 20 = 230",
+    "source": "Hull Ch.9, p.209"
+  },
+  {
+    "id": "bep-017",
+    "type": "bep-finder",
+    "phase": 1,
+    "difficulty": 2,
+    "badge": "손익분기점",
+    "question": "콜옵션을 매수했습니다. 행사가 120, 프리미엄 12. 손익분기점은?",
+    "position": {
+      "type": "call-long",
+      "strike": 120,
+      "premium": 12,
+      "spot_min": 90,
+      "spot_max": 165
+    },
+    "answer": 132,
+    "tolerance_pct": 3,
+    "explanation": "콜 매수의 손익분기점은 행사가 + 프리미엄입니다. 기초자산 가격이 132일 때, 행사 이익(12)과 프리미엄(12)이 상쇄됩니다.",
+    "formula": "BEP = K + c = 120 + 12 = 132",
+    "source": "Hull Ch.9, p.206"
+  },
+  {
+    "id": "bep-018",
+    "type": "bep-finder",
+    "phase": 1,
+    "difficulty": 2,
+    "badge": "손익분기점",
+    "question": "풋옵션을 매수했습니다. 행사가 180, 프리미엄 15. 손익분기점은?",
+    "position": {
+      "type": "put-long",
+      "strike": 180,
+      "premium": 15,
+      "spot_min": 130,
+      "spot_max": 210
+    },
+    "answer": 165,
+    "tolerance_pct": 3,
+    "explanation": "풋 매수의 손익분기점은 행사가 - 프리미엄입니다. 기초자산 가격이 165일 때, 행사 이익(15)과 프리미엄(15)이 상쇄됩니다.",
+    "formula": "BEP = K - p = 180 - 15 = 165",
+    "source": "Hull Ch.9, p.208"
+  },
+  {
+    "id": "bep-019",
+    "type": "bep-finder",
+    "phase": 1,
+    "difficulty": 2,
+    "badge": "손익분기점",
+    "question": "콜옵션을 매수했습니다. 행사가 75, 프리미엄 7. 손익분기점은?",
+    "position": {
+      "type": "call-long",
+      "strike": 75,
+      "premium": 7,
+      "spot_min": 50,
+      "spot_max": 110
+    },
+    "answer": 82,
+    "tolerance_pct": 3,
+    "explanation": "콜 매수의 손익분기점은 행사가 + 프리미엄입니다. 기초자산 가격이 82일 때, 행사 이익(7)과 프리미엄(7)이 상쇄됩니다.",
+    "formula": "BEP = K + c = 75 + 7 = 82",
+    "source": "Hull Ch.9, p.206"
+  },
+  {
+    "id": "bep-020",
+    "type": "bep-finder",
+    "phase": 1,
+    "difficulty": 2,
+    "badge": "손익분기점",
+    "question": "풋옵션을 매수했습니다. 행사가 60, 프리미엄 8. 손익분기점은?",
+    "position": {
+      "type": "put-long",
+      "strike": 60,
+      "premium": 8,
+      "spot_min": 25,
+      "spot_max": 85
+    },
+    "answer": 52,
+    "tolerance_pct": 3,
+    "explanation": "풋 매수의 손익분기점은 행사가 - 프리미엄입니다. 기초자산 가격이 52일 때, 행사 이익(8)과 프리미엄(8)이 상쇄됩니다.",
+    "formula": "BEP = K - p = 60 - 8 = 52",
+    "source": "Hull Ch.9, p.208"
+  },
+  {
+    "id": "bep-021",
+    "type": "bep-finder",
+    "phase": 1,
+    "difficulty": 3,
+    "badge": "손익분기점",
+    "question": "커버드콜 전략: 주식을 100에 매수하고, 행사가 110 콜옵션을 프리미엄 5에 매도했습니다. 손익분기점은?",
+    "position": {
+      "type": "covered-call",
+      "entry_stock": 100,
+      "strike": 110,
+      "spot_min": 65,
+      "spot_max": 135,
+      "premium_received": 5
+    },
+    "answer": 95,
+    "tolerance_pct": 3,
+    "explanation": "커버드콜의 손익분기점은 주식 매수가에서 받은 프리미엄을 뺀 값입니다. 프리미엄 수입이 주식 하락 손실을 일부 상쇄합니다.",
+    "formula": "BEP = S₀ - c = 100 - 5 = 95",
+    "source": "Hull Ch.12, p.275"
+  },
+  {
+    "id": "bep-022",
+    "type": "bep-finder",
+    "phase": 1,
+    "difficulty": 3,
+    "badge": "손익분기점",
+    "question": "커버드콜 전략: 주식을 200에 매수하고, 행사가 220 콜옵션을 프리미엄 10에 매도했습니다. 손익분기점은?",
+    "position": {
+      "type": "covered-call",
+      "entry_stock": 200,
+      "strike": 220,
+      "spot_min": 155,
+      "spot_max": 245,
+      "premium_received": 10
+    },
+    "answer": 190,
+    "tolerance_pct": 3,
+    "explanation": "커버드콜의 손익분기점은 주식 매수가 - 받은 프리미엄입니다. 기초자산이 190 이하로 하락하면 프리미엄 수입으로도 손실을 상쇄하지 못합니다.",
+    "formula": "BEP = S₀ - c = 200 - 10 = 190",
+    "source": "Hull Ch.12, p.275"
+  },
+  {
+    "id": "bep-023",
+    "type": "bep-finder",
+    "phase": 1,
+    "difficulty": 3,
+    "badge": "손익분기점",
+    "question": "보호적 풋 전략: 주식을 100에 매수하고, 행사가 90 풋옵션을 프리미엄 5에 매수했습니다. 손익분기점은?",
+    "position": {
+      "type": "protective-put",
+      "entry_stock": 100,
+      "strike": 90,
+      "spot_min": 60,
+      "spot_max": 135,
+      "premium_paid": 5
+    },
+    "answer": 105,
+    "tolerance_pct": 3,
+    "explanation": "보호적 풋의 손익분기점은 주식 매수가에 지불한 프리미엄을 더한 값입니다. 풋 프리미엄만큼 추가 비용이 발생하므로, 주가가 더 올라야 본전입니다.",
+    "formula": "BEP = S₀ + p = 100 + 5 = 105",
+    "source": "Hull Ch.12, p.277"
+  },
+  {
+    "id": "bep-024",
+    "type": "bep-finder",
+    "phase": 1,
+    "difficulty": 3,
+    "badge": "손익분기점",
+    "question": "보호적 풋 전략: 주식을 150에 매수하고, 행사가 140 풋옵션을 프리미엄 10에 매수했습니다. 손익분기점은?",
+    "position": {
+      "type": "protective-put",
+      "entry_stock": 150,
+      "strike": 140,
+      "spot_min": 110,
+      "spot_max": 195,
+      "premium_paid": 10
+    },
+    "answer": 160,
+    "tolerance_pct": 3,
+    "explanation": "보호적 풋의 손익분기점은 주식 매수가 + 지불한 프리미엄입니다. 주가가 160 이상이어야 주식 보유 비용과 풋 프리미엄을 모두 회수합니다.",
+    "formula": "BEP = S₀ + p = 150 + 10 = 160",
+    "source": "Hull Ch.12, p.277"
+  },
+  {
+    "id": "bep-025",
+    "type": "bep-finder",
+    "phase": 1,
+    "difficulty": 3,
+    "badge": "손익분기점",
+    "question": "강세 콜 스프레드: 행사가 100 콜을 프리미엄 8에 매수하고, 행사가 120 콜을 프리미엄 3에 매도했습니다. 손익분기점은?",
+    "position": {
+      "type": "bull-call-spread",
+      "strike1": 100,
+      "strike2": 120,
+      "premium1": 8,
+      "premium2": 3,
+      "spot_min": 75,
+      "spot_max": 145
+    },
+    "answer": 105,
+    "tolerance_pct": 3,
+    "explanation": "강세 콜 스프레드의 손익분기점은 낮은 행사가에 순 프리미엄 지출을 더한 값입니다. 순 프리미엄 = 8 - 3 = 5이므로, BEP = 100 + 5 = 105입니다.",
+    "formula": "BEP = K₁ + (c₁ - c₂) = 100 + (8 - 3) = 105",
+    "source": "Hull Ch.12, p.282"
+  },
+  {
+    "id": "bep-026",
+    "type": "bep-finder",
+    "phase": 1,
+    "difficulty": 3,
+    "badge": "손익분기점",
+    "question": "강세 콜 스프레드: 행사가 200 콜을 프리미엄 15에 매수하고, 행사가 230 콜을 프리미엄 5에 매도했습니다. 손익분기점은?",
+    "position": {
+      "type": "bull-call-spread",
+      "strike1": 200,
+      "strike2": 230,
+      "premium1": 15,
+      "premium2": 5,
+      "spot_min": 170,
+      "spot_max": 260
+    },
+    "answer": 210,
+    "tolerance_pct": 3,
+    "explanation": "강세 콜 스프레드의 BEP = 낮은 행사가 + 순 프리미엄 지출. 순 프리미엄 = 15 - 5 = 10이므로, BEP = 200 + 10 = 210입니다.",
+    "formula": "BEP = K₁ + (c₁ - c₂) = 200 + (15 - 5) = 210",
+    "source": "Hull Ch.12, p.282"
+  },
+  {
+    "id": "bep-027",
+    "type": "bep-finder",
+    "phase": 1,
+    "difficulty": 3,
+    "badge": "손익분기점",
+    "question": "약세 풋 스프레드: 행사가 80 풋을 프리미엄 3에 매도하고, 행사가 100 풋을 프리미엄 8에 매수했습니다. 손익분기점은?",
+    "position": {
+      "type": "bear-put-spread",
+      "strike1": 80,
+      "strike2": 100,
+      "premium1": 3,
+      "premium2": 8,
+      "spot_min": 55,
+      "spot_max": 125
+    },
+    "answer": 95,
+    "tolerance_pct": 3,
+    "explanation": "약세 풋 스프레드의 손익분기점은 높은 행사가에서 순 프리미엄 지출을 뺀 값입니다. 순 프리미엄 = 8 - 3 = 5이므로, BEP = 100 - 5 = 95입니다.",
+    "formula": "BEP = K₂ - (p₂ - p₁) = 100 - (8 - 3) = 95",
+    "source": "Hull Ch.12, p.284"
+  },
+  {
+    "id": "bep-028",
+    "type": "bep-finder",
+    "phase": 1,
+    "difficulty": 3,
+    "badge": "손익분기점",
+    "question": "약세 풋 스프레드: 행사가 150 풋을 프리미엄 5에 매도하고, 행사가 180 풋을 프리미엄 15에 매수했습니다. 손익분기점은?",
+    "position": {
+      "type": "bear-put-spread",
+      "strike1": 150,
+      "strike2": 180,
+      "premium1": 5,
+      "premium2": 15,
+      "spot_min": 120,
+      "spot_max": 210
+    },
+    "answer": 170,
+    "tolerance_pct": 3,
+    "explanation": "약세 풋 스프레드의 BEP = 높은 행사가 - 순 프리미엄 지출. 순 프리미엄 = 15 - 5 = 10이므로, BEP = 180 - 10 = 170입니다.",
+    "formula": "BEP = K₂ - (p₂ - p₁) = 180 - (15 - 5) = 170",
+    "source": "Hull Ch.12, p.284"
+  },
+  {
+    "id": "bep-029",
+    "type": "bep-finder",
+    "phase": 1,
+    "difficulty": 3,
+    "badge": "손익분기점",
+    "question": "롱 스트래들: 행사가 100에서 콜옵션을 프리미엄 6에, 풋옵션을 프리미엄 4에 동시에 매수했습니다. 손익분기점은?",
+    "position": {
+      "type": "straddle-long",
+      "strike": 100,
+      "call_premium": 6,
+      "put_premium": 4,
+      "spot_min": 75,
+      "spot_max": 125
+    },
+    "answer": [
+      90,
+      110
+    ],
+    "tolerance_pct": 3,
+    "explanation": "롱 스트래들의 손익분기점은 2개입니다. 총 프리미엄(6+4=10)만큼 기초자산이 행사가에서 벗어나야 합니다. 하단 BEP = 100 - 10 = 90, 상단 BEP = 100 + 10 = 110입니다.",
+    "formula": "하단 BEP = K - (c + p) = 100 - 10 = 90\n상단 BEP = K + (c + p) = 100 + 10 = 110",
+    "source": "Hull Ch.12, p.288"
+  },
+  {
+    "id": "bep-030",
+    "type": "bep-finder",
+    "phase": 1,
+    "difficulty": 3,
+    "badge": "손익분기점",
+    "question": "롱 스트래들: 행사가 200에서 콜옵션을 프리미엄 12에, 풋옵션을 프리미엄 8에 동시에 매수했습니다. 손익분기점은?",
+    "position": {
+      "type": "straddle-long",
+      "strike": 200,
+      "call_premium": 12,
+      "put_premium": 8,
+      "spot_min": 155,
+      "spot_max": 245
+    },
+    "answer": [
+      180,
+      220
+    ],
+    "tolerance_pct": 3,
+    "explanation": "롱 스트래들의 손익분기점은 2개입니다. 총 프리미엄(12+8=20)만큼 기초자산이 행사가에서 벗어나야 합니다. 하단 BEP = 200 - 20 = 180, 상단 BEP = 200 + 20 = 220입니다.",
+    "formula": "하단 BEP = K - (c + p) = 200 - 20 = 180\n상단 BEP = K + (c + p) = 200 + 20 = 220",
+    "source": "Hull Ch.12, p.288"
+  }
+]
