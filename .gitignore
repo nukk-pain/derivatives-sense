@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyc
+.venv/
+venv/
+
+# macOS
+.DS_Store
+
+# Editor
+.vscode/
+*.swp
+
+# Development only (GitHub Pages에 배포하지 않는 파일)
+.kickoff/
+.tasks/
+memory/
+HANDOFF.md
+CLAUDE.md
+.claude/
+tools/
