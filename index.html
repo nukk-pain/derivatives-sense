@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>파생상품 감각 훈련</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+  .phase-section { display: none; }
+  .phase-section.active { display: flex; flex-direction: column; gap: 10px; }
+
+  .phase-header {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-light);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 0 2px;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- ===== 모드 선택 화면 ===== -->
+  <div id="modeScreen" class="screen active">
+    <div class="page-title">📈 파생상품 감각 훈련</div>
+    <div class="page-subtitle">선물·옵션·헷지 개념을 퀴즈로 익혀요</div>
+
+    <!-- Phase 탭 -->
+    <div class="phase-tabs">
+      <button class="phase-tab active" onclick="switchPhase(1)">선물 기초</button>
+      <button class="phase-tab" onclick="switchPhase(2)">선물 가격</button>
+      <button class="phase-tab" onclick="switchPhase(3)">옵션 기초</button>
+      <button class="phase-tab" onclick="switchPhase(4)">그릭스</button>
+      <button class="phase-tab" onclick="switchPhase(5)">전략&헷지</button>
+    </div>
+
+    <!-- Phase 1: 선물 기초 -->
+    <div class="phase-section active" id="phase1">
+      <div class="mode-grid">
+        <div class="mode-card" onclick="selectMode('payoff-diagram')">
+          <div class="mode-icon">📊</div>
+          <div class="mode-title">페이오프 다이어그램</div>
+          <div class="mode-desc">손익 그래프 형태를 맞혀요</div>
+        </div>
+        <div class="mode-card disabled">
+          <div class="mode-icon">💰</div>
+          <div class="mode-title">P&amp;L 계산기</div>
+          <div class="mode-desc">준비 중</div>
+          <div class="mode-badge">준비 중</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Phase 2: 선물 가격 (준비 중) -->
+    <div class="phase-section" id="phase2">
+      <div class="mode-grid">
+        <div class="mode-card disabled">
+          <div class="mode-icon">⚖️</div>
+          <div class="mode-title">보유비용 계산</div>
+          <div class="mode-desc">준비 중</div>
+          <div class="mode-badge">준비 중</div>
+        </div>
+        <div class="mode-card disabled">
+          <div class="mode-icon">📉</div>
+          <div class="mode-title">콘탱고 vs 백워데이션</div>
+          <div class="mode-desc">준비 중</div>
+          <div class="mode-badge">준비 중</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Phase 3: 옵션 기초 (준비 중) -->
+    <div class="phase-section" id="phase3">
+      <div class="mode-grid">
+        <div class="mode-card disabled">
+          <div class="mode-icon">🎯</div>
+          <div class="mode-title">페이오프 다이어그램</div>
+          <div class="mode-desc">준비 중</div>
+          <div class="mode-badge">준비 중</div>
+        </div>
+        <div class="mode-card disabled">
+          <div class="mode-icon">🔀</div>
+          <div class="mode-title">풋콜 패리티</div>
+          <div class="mode-desc">준비 중</div>
+          <div class="mode-badge">준비 중</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Phase 4: 그릭스 (준비 중) -->
+    <div class="phase-section" id="phase4">
+      <div class="mode-grid">
+        <div class="mode-card disabled">
+          <div class="mode-icon">🔢</div>
+          <div class="mode-title">델타 감각</div>
+          <div class="mode-desc">준비 중</div>
+          <div class="mode-badge">준비 중</div>
+        </div>
+        <div class="mode-card disabled">
+          <div class="mode-icon">⏱️</div>
+          <div class="mode-title">세타 감각</div>
+          <div class="mode-desc">준비 중</div>
+          <div class="mode-badge">준비 중</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Phase 5: 전략 & 헷지 (준비 중) -->
+    <div class="phase-section" id="phase5">
+      <div class="mode-grid">
+        <div class="mode-card disabled">
+          <div class="mode-icon">🛡️</div>
+          <div class="mode-title">전략 매칭</div>
+          <div class="mode-desc">준비 중</div>
+          <div class="mode-badge">준비 중</div>
+        </div>
+        <div class="mode-card disabled">
+          <div class="mode-icon">🔗</div>
+          <div class="mode-title">헷지 설계</div>
+          <div class="mode-desc">준비 중</div>
+          <div class="mode-badge">준비 중</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-note">선물·옵션·헷지 개념을 퀴즈로 익혀보세요</div>
+  </div>
+
+  <!-- ===== 난이도 선택 화면 ===== -->
+  <div id="levelScreen" class="screen">
+    <div class="back-row">
+      <button class="back-btn" onclick="showScreen('modeScreen')">←</button>
+      <span class="screen-title" id="levelScreenTitle"></span>
+    </div>
+    <div class="page-subtitle" id="levelScreenSubtitle">난이도를 선택하세요</div>
+    <div class="level-list" id="levelList"></div>
+  </div>
+
+</div>
+
+<script src="js/common.js"></script>
+<script>
+// Phase 탭 전환
+function switchPhase(n) {
+  document.querySelectorAll('.phase-tab').forEach((t, i) => t.classList.toggle('active', i === n - 1));
+  document.querySelectorAll('.phase-section').forEach((s, i) => s.classList.toggle('active', i === n - 1));
+}
+
+// 모드별 메타 정보
+const MODES = {
+  'payoff-diagram': {
+    title: '📊 페이오프 다이어그램',
+    href: 'modes/payoff-diagram.html',
+    levels: [
+      { icon: '🌱', name: '쉬움',  desc: '4가지 기본 포지션' },
+      { icon: '🌿', name: '보통',  desc: '방향 + 포지션 구분' },
+      { icon: '🌳', name: '도전',  desc: '조합 전략' },
+    ],
+  },
+};
+
+let currentModeKey = null;
+
+function selectMode(modeKey) {
+  const mode = MODES[modeKey];
+  if (!mode) return;
+  currentModeKey = modeKey;
+
+  document.getElementById('levelScreenTitle').textContent = mode.title;
+
+  const list = document.getElementById('levelList');
+  list.innerHTML = '';
+  mode.levels.forEach((lv, idx) => {
+    const btn = document.createElement('button');
+    btn.className = 'level-btn';
+    btn.innerHTML = `
+      <span class="level-icon">${lv.icon}</span>
+      <div class="level-info">
+        <h3>${lv.name}</h3>
+        <p>${lv.desc}</p>
+      </div>`;
+    btn.addEventListener('pointerdown', () => {
+      location.href = mode.href + '?level=' + idx;
+    });
+    list.appendChild(btn);
+  });
+
+  showScreen('levelScreen');
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,610 @@
+[
+  {
+    "id": "pd-001",
+    "type": "payoff-select",
+    "phase": 1,
+    "difficulty": 1,
+    "badge": "선물 기초",
+    "question": "투자자가 원유 선물 1계약을 매수했습니다. 진입가격은 배럴당 100달러입니다. 만기 시 손익 그래프는?",
+    "params_display": "조건: 선물 매수, 진입가격 100",
+    "position": {
+      "type": "futures-long",
+      "entry": 100,
+      "spot_min": 70,
+      "spot_max": 130
+    },
+    "answer": "futures-long",
+    "explanation": "선물 매수(Long) 손익은 만기 가격 S_T에서 진입가격 F_0을 뺀 값으로, S_T가 높을수록 이익이 커지는 우상향 직선 형태입니다. 손익분기점은 진입가격 100이며, 이론적 최대 손실은 진입가격 전액입니다.",
+    "formula": "선물 매수 P&L = S_T - F_0\n= S_T - 100\n손익분기점(BEP): S_T = F_0 = 100\nS_T > 100 → 이익, S_T < 100 → 손실",
+    "source": "Hull Ch.2, p.38"
+  },
+  {
+    "id": "pd-002",
+    "type": "payoff-select",
+    "phase": 1,
+    "difficulty": 1,
+    "badge": "선물 기초",
+    "question": "투자자가 금 선물 1계약을 매도했습니다. 진입가격은 온스당 110달러입니다. 만기 시 손익 그래프는?",
+    "params_display": "조건: 선물 매도, 진입가격 110",
+    "position": {
+      "type": "futures-short",
+      "entry": 110,
+      "spot_min": 80,
+      "spot_max": 140
+    },
+    "answer": "futures-short",
+    "explanation": "선물 매도(Short) 손익은 진입가격 F_0에서 만기 가격 S_T를 뺀 값으로, S_T가 낮을수록 이익이 커지는 우하향 직선 형태입니다. 손익분기점은 진입가격 110이며, 가격 하락 시 이익을 얻습니다.",
+    "formula": "선물 매도 P&L = F_0 - S_T\n= 110 - S_T\n손익분기점(BEP): S_T = F_0 = 110\nS_T < 110 → 이익, S_T > 110 → 손실",
+    "source": "Hull Ch.2, p.38"
+  },
+  {
+    "id": "pd-003",
+    "type": "payoff-select",
+    "phase": 1,
+    "difficulty": 1,
+    "badge": "콜옵션 기초",
+    "question": "A주식의 콜옵션을 매수했습니다. 행사가 100원, 프리미엄 5원입니다. 만기 손익 그래프는?",
+    "params_display": "조건: 콜옵션 매수, 행사가 100, 프리미엄 5",
+    "position": {
+      "type": "call-long",
+      "strike": 100,
+      "premium": 5,
+      "spot_min": 70,
+      "spot_max": 130
+    },
+    "answer": "call-long",
+    "explanation": "콜옵션 매수 손익은 S_T ≤ 100일 때 -5원(프리미엄 전액 손실), S_T > 100일 때 우상향합니다. 최대 손실은 프리미엄 5원이며, 이익은 이론적으로 무한대입니다. 손익분기점은 105원입니다.",
+    "formula": "콜옵션 매수 P&L = max(S_T - K, 0) - c\n= max(S_T - 100, 0) - 5\n손익분기점(BEP): S_T = K + c = 100 + 5 = 105원\n최대 손실: -c = -5원 (S_T ≤ 100)",
+    "source": "Hull Ch.9, p.206"
+  },
+  {
+    "id": "pd-004",
+    "type": "payoff-select",
+    "phase": 1,
+    "difficulty": 1,
+    "badge": "콜옵션 기초",
+    "question": "B주식의 콜옵션을 매수했습니다. 행사가 110원, 프리미엄 7원입니다. 만기 손익 그래프는?",
+    "params_display": "조건: 콜옵션 매수, 행사가 110, 프리미엄 7",
+    "position": {
+      "type": "call-long",
+      "strike": 110,
+      "premium": 7,
+      "spot_min": 75,
+      "spot_max": 145
+    },
+    "answer": "call-long",
+    "explanation": "콜옵션 매수 손익은 S_T ≤ 110일 때 -7원(프리미엄 전액 손실), S_T > 110일 때 우상향합니다. 손익분기점은 117원이며, 최대 손실은 프리미엄 7원으로 제한됩니다.",
+    "formula": "콜옵션 매수 P&L = max(S_T - K, 0) - c\n= max(S_T - 110, 0) - 7\n손익분기점(BEP): S_T = K + c = 110 + 7 = 117원\n최대 손실: -c = -7원 (S_T ≤ 110)",
+    "source": "Hull Ch.9, p.206"
+  },
+  {
+    "id": "pd-005",
+    "type": "payoff-select",
+    "phase": 1,
+    "difficulty": 1,
+    "badge": "풋옵션 기초",
+    "question": "C주식의 풋옵션을 매수했습니다. 행사가 100원, 프리미엄 4원입니다. 만기 손익 그래프는?",
+    "params_display": "조건: 풋옵션 매수, 행사가 100, 프리미엄 4",
+    "position": {
+      "type": "put-long",
+      "strike": 100,
+      "premium": 4,
+      "spot_min": 70,
+      "spot_max": 130
+    },
+    "answer": "put-long",
+    "explanation": "풋옵션 매수 손익은 S_T ≥ 100일 때 -4원(프리미엄 전액 손실), S_T < 100일 때 우하향합니다. 가격 하락 시 이익이 발생하며, 손익분기점은 96원입니다. 최대 손실은 프리미엄 4원으로 제한됩니다.",
+    "formula": "풋옵션 매수 P&L = max(K - S_T, 0) - p\n= max(100 - S_T, 0) - 4\n손익분기점(BEP): S_T = K - p = 100 - 4 = 96원\n최대 이익: K - p = 96원 (S_T = 0일 때 이론적 최대)",
+    "source": "Hull Ch.9, p.208"
+  },
+  {
+    "id": "pd-006",
+    "type": "payoff-select",
+    "phase": 1,
+    "difficulty": 1,
+    "badge": "풋옵션 기초",
+    "question": "D주식의 풋옵션을 매수했습니다. 행사가 105원, 프리미엄 6원입니다. 만기 손익 그래프는?",
+    "params_display": "조건: 풋옵션 매수, 행사가 105, 프리미엄 6",
+    "position": {
+      "type": "put-long",
+      "strike": 105,
+      "premium": 6,
+      "spot_min": 70,
+      "spot_max": 140
+    },
+    "answer": "put-long",
+    "explanation": "풋옵션 매수 손익은 S_T ≥ 105일 때 -6원(프리미엄 전액 손실), S_T < 105일 때 우하향합니다. 손익분기점은 99원이며, 가격 하락 시 이익을 얻는 구조입니다.",
+    "formula": "풋옵션 매수 P&L = max(K - S_T, 0) - p\n= max(105 - S_T, 0) - 6\n손익분기점(BEP): S_T = K - p = 105 - 6 = 99원\n최대 손실: -p = -6원 (S_T ≥ 105)",
+    "source": "Hull Ch.9, p.208"
+  },
+  {
+    "id": "pd-007",
+    "type": "payoff-select",
+    "phase": 1,
+    "difficulty": 1,
+    "badge": "선물 기초",
+    "question": "KOSPI200 선물 1계약을 매수했습니다. 진입가격은 350pt입니다. 만기 손익 그래프는?",
+    "params_display": "조건: 선물 매수, 진입가격 350pt",
+    "position": {
+      "type": "futures-long",
+      "entry": 350,
+      "spot_min": 280,
+      "spot_max": 420
+    },
+    "answer": "futures-long",
+    "explanation": "선물 매수 손익은 만기 가격에서 진입가격을 뺀 값으로, 우상향 직선입니다. KOSPI200이 350pt를 넘으면 이익, 아래면 손실이며 손익분기점은 350pt입니다.",
+    "formula": "선물 매수 P&L = S_T - F_0\n= S_T - 350\n손익분기점(BEP): S_T = F_0 = 350pt\nS_T > 350 → 이익, S_T < 350 → 손실",
+    "source": "Hull Ch.2, p.38"
+  },
+  {
+    "id": "pd-008",
+    "type": "payoff-select",
+    "phase": 1,
+    "difficulty": 1,
+    "badge": "콜옵션 기초",
+    "question": "E주식의 콜옵션을 매수했습니다. 행사가 120원, 프리미엄 8원입니다. 만기 손익 그래프는?",
+    "params_display": "조건: 콜옵션 매수, 행사가 120, 프리미엄 8",
+    "position": {
+      "type": "call-long",
+      "strike": 120,
+      "premium": 8,
+      "spot_min": 85,
+      "spot_max": 155
+    },
+    "answer": "call-long",
+    "explanation": "콜옵션 매수 손익은 행사가 이하에서 프리미엄만큼 손실이 고정되고, 행사가 초과 시 우상향합니다. 손익분기점은 128원이며 최대 손실은 8원으로 제한됩니다.",
+    "formula": "콜옵션 매수 P&L = max(S_T - K, 0) - c\n= max(S_T - 120, 0) - 8\n손익분기점(BEP): S_T = K + c = 120 + 8 = 128원\n최대 손실: -c = -8원 (S_T ≤ 120)",
+    "source": "Hull Ch.9, p.206"
+  },
+  {
+    "id": "pd-009",
+    "type": "payoff-select",
+    "phase": 1,
+    "difficulty": 1,
+    "badge": "풋옵션 기초",
+    "question": "F주식의 풋옵션을 매수했습니다. 행사가 90원, 프리미엄 3원입니다. 만기 손익 그래프는?",
+    "params_display": "조건: 풋옵션 매수, 행사가 90, 프리미엄 3",
+    "position": {
+      "type": "put-long",
+      "strike": 90,
+      "premium": 3,
+      "spot_min": 60,
+      "spot_max": 120
+    },
+    "answer": "put-long",
+    "explanation": "풋옵션 매수 손익은 가격 하락 시 이익이 발생하는 우하향 구조입니다. 손익분기점은 87원이며, S_T ≥ 90일 때 최대 손실 3원이 고정됩니다.",
+    "formula": "풋옵션 매수 P&L = max(K - S_T, 0) - p\n= max(90 - S_T, 0) - 3\n손익분기점(BEP): S_T = K - p = 90 - 3 = 87원\n최대 손실: -p = -3원 (S_T ≥ 90)",
+    "source": "Hull Ch.9, p.208"
+  },
+  {
+    "id": "pd-010",
+    "type": "payoff-select",
+    "phase": 1,
+    "difficulty": 1,
+    "badge": "선물 기초",
+    "question": "대두 선물 1계약을 매도했습니다. 진입가격은 부셸당 120달러입니다. 만기 손익 그래프는?",
+    "params_display": "조건: 선물 매도, 진입가격 120",
+    "position": {
+      "type": "futures-short",
+      "entry": 120,
+      "spot_min": 90,
+      "spot_max": 150
+    },
+    "answer": "futures-short",
+    "explanation": "선물 매도 손익은 진입가격에서 만기 가격을 뺀 값으로, 우하향 직선입니다. 가격이 하락할수록 이익이 커지며 손익분기점은 120달러입니다.",
+    "formula": "선물 매도 P&L = F_0 - S_T\n= 120 - S_T\n손익분기점(BEP): S_T = F_0 = 120\nS_T < 120 → 이익, S_T > 120 → 손실",
+    "source": "Hull Ch.2, p.38"
+  },
+  {
+    "id": "pd-011",
+    "type": "payoff-select",
+    "phase": 1,
+    "difficulty": 2,
+    "badge": "방향 구분",
+    "question": "투자자가 콜옵션을 매도하여 프리미엄을 수취했습니다. 행사가 100원, 수취 프리미엄 5원. 만기 손익 그래프는?",
+    "params_display": "조건: 콜옵션 매도, 행사가 100, 프리미엄 수취 5",
+    "position": {
+      "type": "call-short",
+      "strike": 100,
+      "premium": 5,
+      "spot_min": 70,
+      "spot_max": 130
+    },
+    "answer": "call-short",
+    "explanation": "콜옵션 매도 손익은 매수와 반대 구조입니다. S_T ≤ 100일 때 프리미엄 5원 전액을 이익으로 얻으며, S_T > 100일 때는 손실이 증가합니다. 손익분기점은 105원이며 최대 이익은 5원으로 제한됩니다.",
+    "formula": "콜옵션 매도 P&L = c - max(S_T - K, 0)\n= 5 - max(S_T - 100, 0)\n손익분기점(BEP): S_T = K + c = 100 + 5 = 105원\n최대 이익: +c = +5원 (S_T ≤ 100)\n최대 손실: 이론적 무한대 (S_T 상승 시)",
+    "source": "Hull Ch.9, p.207"
+  },
+  {
+    "id": "pd-012",
+    "type": "payoff-select",
+    "phase": 1,
+    "difficulty": 2,
+    "badge": "방향 구분",
+    "question": "투자자가 풋옵션을 매도하여 프리미엄을 수취했습니다. 행사가 100원, 수취 프리미엄 4원. 만기 손익 그래프는?",
+    "params_display": "조건: 풋옵션 매도, 행사가 100, 프리미엄 수취 4",
+    "position": {
+      "type": "put-short",
+      "strike": 100,
+      "premium": 4,
+      "spot_min": 70,
+      "spot_max": 130
+    },
+    "answer": "put-short",
+    "explanation": "풋옵션 매도 손익은 매수와 반대 구조입니다. S_T ≥ 100일 때 프리미엄 4원을 이익으로 얻고, S_T < 100이면 손실이 증가합니다. 손익분기점은 96원이며, 최대 이익은 4원으로 제한됩니다.",
+    "formula": "풋옵션 매도 P&L = p - max(K - S_T, 0)\n= 4 - max(100 - S_T, 0)\n손익분기점(BEP): S_T = K - p = 100 - 4 = 96원\n최대 이익: +p = +4원 (S_T ≥ 100)\n최대 손실: K - p = 96원 (S_T = 0일 때 이론적 최대)",
+    "source": "Hull Ch.9, p.209"
+  },
+  {
+    "id": "pd-013",
+    "type": "payoff-select",
+    "phase": 1,
+    "difficulty": 2,
+    "badge": "방향 구분",
+    "question": "투자자가 콜옵션을 매도하여 프리미엄 8원을 수취했습니다. 행사가 110원. 만기 손익 그래프는?",
+    "params_display": "조건: 콜옵션 매도, 행사가 110, 프리미엄 수취 8",
+    "position": {
+      "type": "call-short",
+      "strike": 110,
+      "premium": 8,
+      "spot_min": 80,
+      "spot_max": 140
+    },
+    "answer": "call-short",
+    "explanation": "콜옵션 매도 손익은 S_T ≤ 110일 때 프리미엄 8원이 최대 이익으로 고정되고, S_T > 110이면 손실이 무한정 증가합니다. 손익분기점은 118원입니다.",
+    "formula": "콜옵션 매도 P&L = c - max(S_T - K, 0)\n= 8 - max(S_T - 110, 0)\n손익분기점(BEP): S_T = K + c = 110 + 8 = 118원\n최대 이익: +c = +8원 (S_T ≤ 110)",
+    "source": "Hull Ch.9, p.207"
+  },
+  {
+    "id": "pd-014",
+    "type": "payoff-select",
+    "phase": 1,
+    "difficulty": 2,
+    "badge": "방향 구분",
+    "question": "투자자가 풋옵션을 매도하여 프리미엄 6원을 수취했습니다. 행사가 105원. 만기 손익 그래프는?",
+    "params_display": "조건: 풋옵션 매도, 행사가 105, 프리미엄 수취 6",
+    "position": {
+      "type": "put-short",
+      "strike": 105,
+      "premium": 6,
+      "spot_min": 70,
+      "spot_max": 135
+    },
+    "answer": "put-short",
+    "explanation": "풋옵션 매도 손익은 S_T ≥ 105일 때 최대 이익 6원이 고정되고, S_T < 105이면 손실이 증가합니다. 손익분기점은 99원이며, 가격 상승 시 이익입니다.",
+    "formula": "풋옵션 매도 P&L = p - max(K - S_T, 0)\n= 6 - max(105 - S_T, 0)\n손익분기점(BEP): S_T = K - p = 105 - 6 = 99원\n최대 이익: +p = +6원 (S_T ≥ 105)",
+    "source": "Hull Ch.9, p.209"
+  },
+  {
+    "id": "pd-015",
+    "type": "payoff-select",
+    "phase": 1,
+    "difficulty": 2,
+    "badge": "방향 구분",
+    "question": "헷지 목적으로 풋옵션을 매수하여 하락을 방어했습니다. 행사가 95원, 프리미엄 5원. 만기 손익 그래프는?",
+    "params_display": "조건: 풋옵션 매수(하락 헷지), 행사가 95, 프리미엄 5",
+    "position": {
+      "type": "put-long",
+      "strike": 95,
+      "premium": 5,
+      "spot_min": 65,
+      "spot_max": 125
+    },
+    "answer": "put-long",
+    "explanation": "풋옵션 매수(하락 헷지)는 가격 하락 시 이익이 발생합니다. S_T ≥ 95이면 프리미엄 5원만 손실이고, S_T < 95이면 이익이 증가합니다. 손익분기점은 90원입니다.",
+    "formula": "풋옵션 매수 P&L = max(K - S_T, 0) - p\n= max(95 - S_T, 0) - 5\n손익분기점(BEP): S_T = K - p = 95 - 5 = 90원\n최대 손실: -p = -5원 (S_T ≥ 95)",
+    "source": "Hull Ch.9, p.208"
+  },
+  {
+    "id": "pd-016",
+    "type": "payoff-select",
+    "phase": 1,
+    "difficulty": 2,
+    "badge": "방향 구분",
+    "question": "시장 상승을 예상하여 콜옵션을 매수했습니다. 행사가 105원, 프리미엄 9원. 만기 손익 그래프는?",
+    "params_display": "조건: 콜옵션 매수(상승 기대), 행사가 105, 프리미엄 9",
+    "position": {
+      "type": "call-long",
+      "strike": 105,
+      "premium": 9,
+      "spot_min": 75,
+      "spot_max": 140
+    },
+    "answer": "call-long",
+    "explanation": "상승 기대 시 콜옵션 매수는 가격 상승 시 이익, 하락 시 최대 프리미엄만 손실입니다. 손익분기점은 114원이며, S_T > 114부터 순이익이 발생합니다.",
+    "formula": "콜옵션 매수 P&L = max(S_T - K, 0) - c\n= max(S_T - 105, 0) - 9\n손익분기점(BEP): S_T = K + c = 105 + 9 = 114원\n최대 손실: -c = -9원 (S_T ≤ 105)",
+    "source": "Hull Ch.9, p.206"
+  },
+  {
+    "id": "pd-017",
+    "type": "payoff-select",
+    "phase": 1,
+    "difficulty": 2,
+    "badge": "방향 구분",
+    "question": "시장이 보합세일 것으로 예상하여 콜옵션을 매도했습니다. 행사가 100원, 수취 프리미엄 6원. 만기 손익 그래프는?",
+    "params_display": "조건: 콜옵션 매도(보합 예상), 행사가 100, 프리미엄 6",
+    "position": {
+      "type": "call-short",
+      "strike": 100,
+      "premium": 6,
+      "spot_min": 70,
+      "spot_max": 130
+    },
+    "answer": "call-short",
+    "explanation": "보합세 예상 시 콜옵션 매도는 S_T ≤ 100이면 프리미엄 6원 전액 이익이 고정됩니다. 손익분기점 106원을 넘으면 손실이 발생하며, 최대 이익은 프리미엄 6원으로 제한됩니다.",
+    "formula": "콜옵션 매도 P&L = c - max(S_T - K, 0)\n= 6 - max(S_T - 100, 0)\n손익분기점(BEP): S_T = K + c = 100 + 6 = 106원\n최대 이익: +c = +6원 (S_T ≤ 100)",
+    "source": "Hull Ch.9, p.207"
+  },
+  {
+    "id": "pd-018",
+    "type": "payoff-select",
+    "phase": 1,
+    "difficulty": 2,
+    "badge": "방향 구분",
+    "question": "선물을 매수하여 가격 상승에 포지션을 잡았습니다. 진입가격 105. 만기 손익 그래프는?",
+    "params_display": "조건: 선물 매수, 진입가격 105",
+    "position": {
+      "type": "futures-long",
+      "entry": 105,
+      "spot_min": 75,
+      "spot_max": 135
+    },
+    "answer": "futures-long",
+    "explanation": "선물 매수는 가격 상승 시 무한 이익, 하락 시 무한 손실이 발생합니다. 옵션과 달리 프리미엄이 없고 손익분기점은 진입가격 105 그 자체입니다.",
+    "formula": "선물 매수 P&L = S_T - F_0\n= S_T - 105\n손익분기점(BEP): S_T = F_0 = 105\nS_T > 105 → 이익, S_T < 105 → 손실",
+    "source": "Hull Ch.2, p.38"
+  },
+  {
+    "id": "pd-019",
+    "type": "payoff-select",
+    "phase": 1,
+    "difficulty": 2,
+    "badge": "방향 구분",
+    "question": "선물을 매도하여 가격 하락에 포지션을 잡았습니다. 진입가격 95. 만기 손익 그래프는?",
+    "params_display": "조건: 선물 매도, 진입가격 95",
+    "position": {
+      "type": "futures-short",
+      "entry": 95,
+      "spot_min": 65,
+      "spot_max": 125
+    },
+    "answer": "futures-short",
+    "explanation": "선물 매도는 가격 하락 시 이익, 상승 시 손실이 발생하는 우하향 직선입니다. 손익분기점은 진입가격 95이며, 옵션 매도와 달리 이익도 이론적으로 무한대입니다(S_T → 0).",
+    "formula": "선물 매도 P&L = F_0 - S_T\n= 95 - S_T\n손익분기점(BEP): S_T = F_0 = 95\nS_T < 95 → 이익, S_T > 95 → 손실",
+    "source": "Hull Ch.2, p.38"
+  },
+  {
+    "id": "pd-020",
+    "type": "payoff-select",
+    "phase": 1,
+    "difficulty": 2,
+    "badge": "방향 구분",
+    "question": "투자자가 풋옵션을 매도하여 보험료 수입을 얻었습니다. 행사가 90원, 수취 프리미엄 3원. 만기 손익 그래프는?",
+    "params_display": "조건: 풋옵션 매도, 행사가 90, 프리미엄 수취 3",
+    "position": {
+      "type": "put-short",
+      "strike": 90,
+      "premium": 3,
+      "spot_min": 60,
+      "spot_max": 120
+    },
+    "answer": "put-short",
+    "explanation": "풋옵션 매도는 S_T ≥ 90이면 프리미엄 3원 전액 이익, S_T < 90이면 손실이 증가합니다. 손익분기점은 87원이며 최대 이익은 3원으로 제한됩니다.",
+    "formula": "풋옵션 매도 P&L = p - max(K - S_T, 0)\n= 3 - max(90 - S_T, 0)\n손익분기점(BEP): S_T = K - p = 90 - 3 = 87원\n최대 이익: +p = +3원 (S_T ≥ 90)",
+    "source": "Hull Ch.9, p.209"
+  },
+  {
+    "id": "pd-021",
+    "type": "payoff-select",
+    "phase": 1,
+    "difficulty": 3,
+    "badge": "조합 전략",
+    "question": "주식 100주를 매수가 100원에 보유하면서 행사가 110원 콜옵션을 매도하여 프리미엄 5원을 수취했습니다. 만기 손익 그래프는?",
+    "params_display": "조건: 커버드콜, 주식 매수가 100, 행사가 110, 프리미엄 수취 5",
+    "position": {
+      "type": "covered-call",
+      "entry_stock": 100,
+      "strike": 110,
+      "premium_received": 5,
+      "spot_min": 70,
+      "spot_max": 140
+    },
+    "answer": "covered-call",
+    "explanation": "커버드콜은 주식 보유 중 콜옵션을 매도하는 전략입니다. S_T ≤ 110이면 주식 손익 + 프리미엄 5원 수취, S_T > 110이면 이익이 110원에서 상한선이 생깁니다. 손익분기점은 95원, 최대 이익은 15원입니다.",
+    "formula": "커버드콜 P&L = (S_T - S_0) + c - max(S_T - K, 0)\n= (S_T - 100) + 5 - max(S_T - 110, 0)\n손익분기점(BEP): S_0 - c = 100 - 5 = 95원\n최대 이익: K - S_0 + c = 110 - 100 + 5 = 15원 (S_T ≥ 110)",
+    "source": "Hull Ch.10, p.234"
+  },
+  {
+    "id": "pd-022",
+    "type": "payoff-select",
+    "phase": 1,
+    "difficulty": 3,
+    "badge": "조합 전략",
+    "question": "주식을 매수가 100원에 보유하면서 행사가 95원 풋옵션을 매수하여 프리미엄 4원을 지불했습니다(보호적 풋). 만기 손익 그래프는?",
+    "params_display": "조건: 보호적 풋, 주식 매수가 100, 행사가 95, 프리미엄 지급 4",
+    "position": {
+      "type": "protective-put",
+      "entry_stock": 100,
+      "strike": 95,
+      "premium_paid": 4,
+      "spot_min": 70,
+      "spot_max": 130
+    },
+    "answer": "protective-put",
+    "explanation": "보호적 풋은 주식 보유 중 풋옵션을 매수하여 하락 위험을 제한하는 전략입니다. S_T < 95이면 손실이 -9원에서 하한선이 생기고, S_T > 95이면 주식 손익에서 프리미엄 4원을 공제합니다. 손익분기점은 104원입니다.",
+    "formula": "보호적 풋 P&L = (S_T - S_0) - p + max(K - S_T, 0)\n= (S_T - 100) - 4 + max(95 - S_T, 0)\n손익분기점(BEP): S_0 + p = 100 + 4 = 104원\n최대 손실: K - S_0 - p = 95 - 100 - 4 = -9원 (S_T ≤ 95)",
+    "source": "Hull Ch.10, p.234"
+  },
+  {
+    "id": "pd-023",
+    "type": "payoff-select",
+    "phase": 1,
+    "difficulty": 3,
+    "badge": "조합 전략",
+    "question": "주식을 매수가 105원에 보유하면서 행사가 115원 콜옵션을 매도하여 프리미엄 6원을 수취했습니다(커버드콜). 만기 손익 그래프는?",
+    "params_display": "조건: 커버드콜, 주식 매수가 105, 행사가 115, 프리미엄 수취 6",
+    "position": {
+      "type": "covered-call",
+      "entry_stock": 105,
+      "strike": 115,
+      "premium_received": 6,
+      "spot_min": 75,
+      "spot_max": 145
+    },
+    "answer": "covered-call",
+    "explanation": "커버드콜에서 S_T ≤ 115이면 주식 손익 + 프리미엄 6원을 얻고, S_T > 115이면 이익이 16원에서 상한선이 생깁니다. 손익분기점은 99원이며, 이미 보유한 주식 위에 추가 수익을 창출하는 전략입니다.",
+    "formula": "커버드콜 P&L = (S_T - S_0) + c - max(S_T - K, 0)\n= (S_T - 105) + 6 - max(S_T - 115, 0)\n손익분기점(BEP): S_0 - c = 105 - 6 = 99원\n최대 이익: K - S_0 + c = 115 - 105 + 6 = 16원 (S_T ≥ 115)",
+    "source": "Hull Ch.10, p.234"
+  },
+  {
+    "id": "pd-024",
+    "type": "payoff-select",
+    "phase": 1,
+    "difficulty": 3,
+    "badge": "조합 전략",
+    "question": "행사가 100 콜옵션을 8원에 매수하고, 행사가 110 콜옵션을 3원에 매도하여 강세 스프레드(Bull Call Spread)를 구성했습니다. 만기 손익 그래프는?",
+    "params_display": "조건: Bull Call Spread, K1=100(매수, 8원), K2=110(매도, 3원)",
+    "position": {
+      "type": "bull-call-spread",
+      "strike1": 100,
+      "strike2": 110,
+      "premium1": 8,
+      "premium2": 3,
+      "spot_min": 75,
+      "spot_max": 135
+    },
+    "answer": "bull-call-spread",
+    "explanation": "Bull Call Spread는 저행사가 콜 매수 + 고행사가 콜 매도로 구성됩니다. 순비용은 8-3=5원, 최대 이익은 (110-100)-5=5원(S_T≥110), 최대 손실은 -5원(S_T≤100)입니다. 손익분기점은 105원입니다.",
+    "formula": "Bull Call Spread P&L = max(S_T-K1,0) - c1 - max(S_T-K2,0) + c2\n= max(S_T-100,0) - 8 - max(S_T-110,0) + 3\n순비용: c1 - c2 = 8 - 3 = 5원\n손익분기점(BEP): K1 + (c1 - c2) = 100 + 5 = 105원\n최대 이익: (K2-K1) - (c1-c2) = 10 - 5 = 5원 (S_T ≥ 110)",
+    "source": "Hull Ch.10, p.236"
+  },
+  {
+    "id": "pd-025",
+    "type": "payoff-select",
+    "phase": 1,
+    "difficulty": 3,
+    "badge": "조합 전략",
+    "question": "행사가 90 풋옵션을 2원에 매도하고, 행사가 100 풋옵션을 7원에 매수하여 약세 스프레드(Bear Put Spread)를 구성했습니다. 만기 손익 그래프는?",
+    "params_display": "조건: Bear Put Spread, K1=90(매도, 2원), K2=100(매수, 7원)",
+    "position": {
+      "type": "bear-put-spread",
+      "strike1": 90,
+      "strike2": 100,
+      "premium1": 2,
+      "premium2": 7,
+      "spot_min": 65,
+      "spot_max": 125
+    },
+    "answer": "bear-put-spread",
+    "explanation": "Bear Put Spread는 고행사가 풋 매수 + 저행사가 풋 매도로 구성됩니다. 순비용은 7-2=5원, 최대 이익은 (100-90)-5=5원(S_T≤90), 최대 손실은 -5원(S_T≥100)입니다. 손익분기점은 95원입니다.",
+    "formula": "Bear Put Spread P&L = max(K2-S_T,0) - p2 - max(K1-S_T,0) + p1\n= max(100-S_T,0) - 7 - max(90-S_T,0) + 2\n순비용: p2 - p1 = 7 - 2 = 5원\n손익분기점(BEP): K2 - (p2-p1) = 100 - 5 = 95원\n최대 이익: (K2-K1) - (p2-p1) = 10 - 5 = 5원 (S_T ≤ 90)",
+    "source": "Hull Ch.10, p.238"
+  },
+  {
+    "id": "pd-026",
+    "type": "payoff-select",
+    "phase": 1,
+    "difficulty": 3,
+    "badge": "조합 전략",
+    "question": "행사가 100인 콜옵션(5원)과 풋옵션(4원)을 동시에 매수하여 롱 스트래들을 구성했습니다. 만기 손익 그래프는?",
+    "params_display": "조건: Long Straddle, 행사가 100, 콜 프리미엄 5, 풋 프리미엄 4",
+    "position": {
+      "type": "straddle-long",
+      "strike": 100,
+      "call_premium": 5,
+      "put_premium": 4,
+      "spot_min": 70,
+      "spot_max": 130
+    },
+    "answer": "straddle-long",
+    "explanation": "롱 스트래들은 가격이 크게 움직이면 방향에 관계없이 이익을 얻는 전략입니다. 순비용은 9원이며, 만기 가격이 91원 이하 또는 109원 이상이면 이익입니다. 행사가 근처(100원)에서 최대 손실 9원이 발생합니다.",
+    "formula": "Long Straddle P&L = max(S_T-K,0) - c + max(K-S_T,0) - p\n= max(S_T-100,0) - 5 + max(100-S_T,0) - 4\n순비용: c + p = 5 + 4 = 9원\n하방 BEP: K - (c+p) = 100 - 9 = 91원\n상방 BEP: K + (c+p) = 100 + 9 = 109원\n최대 손실: -(c+p) = -9원 (S_T = K = 100)",
+    "source": "Hull Ch.10, p.244"
+  },
+  {
+    "id": "pd-027",
+    "type": "payoff-select",
+    "phase": 1,
+    "difficulty": 3,
+    "badge": "조합 전략",
+    "question": "행사가 95 콜옵션을 10원에 매수하고, 행사가 105 콜옵션을 4원에 매도하여 강세 스프레드를 구성했습니다. 만기 손익 그래프는?",
+    "params_display": "조건: Bull Call Spread, K1=95(매수, 10원), K2=105(매도, 4원)",
+    "position": {
+      "type": "bull-call-spread",
+      "strike1": 95,
+      "strike2": 105,
+      "premium1": 10,
+      "premium2": 4,
+      "spot_min": 70,
+      "spot_max": 130
+    },
+    "answer": "bull-call-spread",
+    "explanation": "순비용은 10-4=6원이며, 최대 이익은 (105-95)-6=4원(S_T≥105)입니다. S_T≤95이면 최대 손실 -6원이 고정됩니다. 손익분기점은 95+6=101원입니다. 콜 매수 비용을 매도로 일부 상쇄하는 전략입니다.",
+    "formula": "Bull Call Spread P&L = max(S_T-K1,0) - c1 - max(S_T-K2,0) + c2\n= max(S_T-95,0) - 10 - max(S_T-105,0) + 4\n순비용: c1 - c2 = 10 - 4 = 6원\n손익분기점(BEP): K1 + (c1-c2) = 95 + 6 = 101원\n최대 이익: (K2-K1) - (c1-c2) = 10 - 6 = 4원 (S_T ≥ 105)",
+    "source": "Hull Ch.10, p.236"
+  },
+  {
+    "id": "pd-028",
+    "type": "payoff-select",
+    "phase": 1,
+    "difficulty": 3,
+    "badge": "조합 전략",
+    "question": "행사가 95 풋옵션을 3원에 매도하고, 행사가 105 풋옵션을 8원에 매수하여 약세 스프레드를 구성했습니다. 만기 손익 그래프는?",
+    "params_display": "조건: Bear Put Spread, K1=95(매도, 3원), K2=105(매수, 8원)",
+    "position": {
+      "type": "bear-put-spread",
+      "strike1": 95,
+      "strike2": 105,
+      "premium1": 3,
+      "premium2": 8,
+      "spot_min": 70,
+      "spot_max": 130
+    },
+    "answer": "bear-put-spread",
+    "explanation": "순비용은 8-3=5원이며, 최대 이익은 (105-95)-5=5원(S_T≤95)입니다. S_T≥105이면 최대 손실 -5원이 고정됩니다. 손익분기점은 105-5=100원입니다.",
+    "formula": "Bear Put Spread P&L = max(K2-S_T,0) - p2 - max(K1-S_T,0) + p1\n= max(105-S_T,0) - 8 - max(95-S_T,0) + 3\n순비용: p2 - p1 = 8 - 3 = 5원\n손익분기점(BEP): K2 - (p2-p1) = 105 - 5 = 100원\n최대 이익: (K2-K1) - (p2-p1) = 10 - 5 = 5원 (S_T ≤ 95)",
+    "source": "Hull Ch.10, p.238"
+  },
+  {
+    "id": "pd-029",
+    "type": "payoff-select",
+    "phase": 1,
+    "difficulty": 3,
+    "badge": "조합 전략",
+    "question": "주식을 매수가 110원에 보유하면서 행사가 105원 풋옵션을 매수하여 프리미엄 5원을 지불했습니다(보호적 풋). 만기 손익 그래프는?",
+    "params_display": "조건: 보호적 풋, 주식 매수가 110, 행사가 105, 프리미엄 지급 5",
+    "position": {
+      "type": "protective-put",
+      "entry_stock": 110,
+      "strike": 105,
+      "premium_paid": 5,
+      "spot_min": 80,
+      "spot_max": 145
+    },
+    "answer": "protective-put",
+    "explanation": "보호적 풋에서 S_T < 105이면 손실이 -10원에서 하한선이 생기고(최대 손실 = 105-110-5 = -10원), S_T > 105이면 주식 손익에서 프리미엄 5원이 공제됩니다. 손익분기점은 115원입니다.",
+    "formula": "보호적 풋 P&L = (S_T - S_0) - p + max(K - S_T, 0)\n= (S_T - 110) - 5 + max(105 - S_T, 0)\n손익분기점(BEP): S_0 + p = 110 + 5 = 115원\n최대 손실: K - S_0 - p = 105 - 110 - 5 = -10원 (S_T ≤ 105)",
+    "source": "Hull Ch.10, p.234"
+  },
+  {
+    "id": "pd-030",
+    "type": "payoff-select",
+    "phase": 1,
+    "difficulty": 3,
+    "badge": "조합 전략",
+    "question": "행사가 100인 콜옵션(7원)과 풋옵션(6원)을 동시에 매수하여 롱 스트래들을 구성했습니다. 만기 손익 그래프는?",
+    "params_display": "조건: Long Straddle, 행사가 100, 콜 프리미엄 7, 풋 프리미엄 6",
+    "position": {
+      "type": "straddle-long",
+      "strike": 100,
+      "call_premium": 7,
+      "put_premium": 6,
+      "spot_min": 65,
+      "spot_max": 135
+    },
+    "answer": "straddle-long",
+    "explanation": "순비용 13원으로 가격이 크게 움직여야 이익이 납니다. 하방 손익분기점은 87원, 상방은 113원이며, 행사가 100원 근처에서 최대 손실 13원이 발생합니다. 변동성이 클수록 유리한 전략입니다.",
+    "formula": "Long Straddle P&L = max(S_T-K,0) - c + max(K-S_T,0) - p\n= max(S_T-100,0) - 7 + max(100-S_T,0) - 6\n순비용: c + p = 7 + 6 = 13원\n하방 BEP: K - (c+p) = 100 - 13 = 87원\n상방 BEP: K + (c+p) = 100 + 13 = 113원\n최대 손실: -(c+p) = -13원 (S_T = K = 100)",
+    "source": "Hull Ch.10, p.244"
+  }
+]

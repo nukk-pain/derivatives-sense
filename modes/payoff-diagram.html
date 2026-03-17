@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>페이오프 다이어그램</title>
+<link rel="stylesheet" href="../css/style.css">
+<style>
+  /* style.css에 없는 모드 전용 스타일만 여기에 정의 */
+
+  /* 정답/오답 뱃지 (html 전용 — style.css에 없음) */
+  .choice-badge {
+    font-size: 16px;
+    line-height: 1;
+    display: none;
+    position: absolute;
+    top: 5px; right: 7px;
+  }
+  .payoff-choice.correct   .choice-badge,
+  .payoff-choice.highlight .choice-badge,
+  .payoff-choice.wrong     .choice-badge { display: block; }
+
+  /* wrong opacity (style.css의 0.7을 0.65로 오버라이드) */
+  .payoff-choice.wrong { opacity: 0.65; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- ===== 게임 화면 ===== -->
+  <div id="gameScreen" class="screen active">
+    <!-- 헤더 -->
+    <div class="game-header">
+      <button class="back-btn" onclick="goHome()">←</button>
+      <span class="round-info" id="roundInfo">1 / 10</span>
+      <span class="score-display" id="scoreDisplay">0점</span>
+    </div>
+
+    <!-- 히스토리 바 -->
+    <div class="history-bar" id="historyBar"></div>
+
+    <!-- 문제 카드 -->
+    <div class="question-card" id="questionCard">
+      <div class="question-badge" id="questionBadge">선물 기초</div>
+      <div class="question-text"  id="questionText">문제 로딩 중...</div>
+      <div class="question-params" id="questionParams" style="display:none"></div>
+    </div>
+
+    <!-- 4지선다 차트 -->
+    <div class="payoff-grid" id="payoffGrid">
+      <!-- JS로 생성 -->
+    </div>
+
+    <!-- 피드백 -->
+    <div class="feedback" id="feedback">
+      <div class="feedback-stars"   id="feedbackStars"></div>
+      <div class="feedback-message" id="feedbackMessage"></div>
+      <div class="feedback-detail"  id="feedbackDetail"></div>
+      <div class="feedback-formula" id="feedbackFormula"></div>
+    </div>
+
+    <!-- 다음 버튼 -->
+    <button class="next-btn" id="nextBtn" onclick="nextQuestion()">다음 →</button>
+  </div>
+
+  <!-- ===== 결과 화면 ===== -->
+  <div id="resultScreen" class="screen"></div>
+
+</div>
+
+<script src="../js/common.js"></script>
+<script src="../js/payoff.js"></script>
+<script>
+// ─── 포지션 유형 한국어 이름 ───────────────────────────────
+const TYPE_NAMES = {
+  'futures-long':    '선물 매수 (Long Futures)',
+  'futures-short':   '선물 매도 (Short Futures)',
+  'call-long':       '콜옵션 매수 (Long Call)',
+  'call-short':      '콜옵션 매도 (Short Call)',
+  'put-long':        '풋옵션 매수 (Long Put)',
+  'put-short':       '풋옵션 매도 (Short Put)',
+  'covered-call':    '커버드콜 (Covered Call)',
+  'protective-put':  '보호적 풋 (Protective Put)',
+  'bull-call-spread':'강세 콜 스프레드 (Bull Call Spread)',
+  'bear-put-spread': '약세 풋 스프레드 (Bear Put Spread)',
+  'straddle-long':   '스트래들 매수 (Long Straddle)',
+};
+
+// ─── 상태 ─────────────────────────────────────────────────
+const level    = getLevelFromURL();
+const engine   = new GameEngine({ totalRounds: 10 });
+const loader   = new QuestionLoader('../questions/payoff-diagram.json');
+let   currentQ      = null;
+let   answered      = false;
+let   currentChoices = []; // buildChoices에서 채워짐 — selectChoice에서 highlighted 재렌더링에 사용
+
+// ─── 초기화 ───────────────────────────────────────────────
+async function init() {
+  try {
+    await loader.load(level);
+  } catch (e) {
+    document.getElementById('questionText').textContent = '⚠️ 문제를 불러올 수 없습니다. 서버에서 실행 중인지 확인하세요.';
+    return;
+  }
+
+  await showOnboarding('payoff-diagram', {
+    icon: '📊',
+    title: '페이오프 다이어그램',
+    text: '포지션 설명을 읽고 올바른 손익 그래프를 선택하세요.\n만기 시의 이익/손실을 보여주는 그래프입니다.',
+  });
+
+  renderQuestion();
+}
+
+// ─── 문제 렌더링 ──────────────────────────────────────────
+function renderQuestion() {
+  currentQ = loader.next();
+  answered = false;
+
+  // 라운드 표시
+  document.getElementById('roundInfo').textContent =
+    `${engine.currentRoundDisplay} / ${engine.totalRounds}`;
+  document.getElementById('scoreDisplay').textContent = `${engine.score}점`;
+
+  // 히스토리 바
+  engine.renderHistoryBar(document.getElementById('historyBar'));
+
+  // 문제 카드
+  document.getElementById('questionBadge').textContent = currentQ.badge || '선물 · 옵션 · 헷지';
+  document.getElementById('questionText').textContent  = currentQ.question;
+
+  const paramsEl = document.getElementById('questionParams');
+  if (currentQ.params_display) {
+    paramsEl.textContent  = currentQ.params_display;
+    paramsEl.style.display = 'block';
+  } else {
+    paramsEl.style.display = 'none';
+  }
+
+  // 피드백 숨기기
+  document.getElementById('feedback').classList.remove('show');
+  document.getElementById('feedbackFormula').style.display = 'none';
+  document.getElementById('nextBtn').classList.remove('show');
+
+  // 4지선다 생성
+  buildChoices();
+}
+
+// ─── 4지선다 차트 생성 ────────────────────────────────────
+function buildChoices() {
+  const grid = document.getElementById('payoffGrid');
+  grid.innerHTML = '';
+
+  // 정답 + 3 distractors
+  const answerType = currentQ.answer;
+  const answerParams = currentQ.position;
+  const distractorTypes = getDistractors(answerType);
+
+  currentChoices = [
+    { type: answerType,         params: answerParams, isCorrect: true  },
+    { type: distractorTypes[0], params: makeDistractorParams(distractorTypes[0], answerParams), isCorrect: false },
+    { type: distractorTypes[1], params: makeDistractorParams(distractorTypes[1], answerParams), isCorrect: false },
+    { type: distractorTypes[2], params: makeDistractorParams(distractorTypes[2], answerParams), isCorrect: false },
+  ];
+  const choices = currentChoices;
+
+  // 셔플
+  for (let i = choices.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [choices[i], choices[j]] = [choices[j], choices[i]];
+  }
+
+  // canvas 크기: 화면 너비 기반으로 계산
+  const gridWidth  = Math.min(grid.parentElement.clientWidth, 572);
+  const chartW     = Math.floor((gridWidth - 32) / 2); // 2열, gap 8px, padding
+  const chartH     = Math.round(chartW * 0.75);
+
+  choices.forEach((choice, idx) => {
+    const div = document.createElement('div');
+    div.className = 'payoff-choice';
+    div.dataset.idx = idx;
+    div.dataset.correct = choice.isCorrect ? '1' : '0';
+
+    const badge = document.createElement('span');
+    badge.className = 'choice-badge';
+    badge.textContent = choice.isCorrect ? '✓' : '✗';
+
+    const canvas = document.createElement('canvas');
+    canvas.width  = chartW;
+    canvas.height = chartH;
+
+    div.appendChild(badge);
+    div.appendChild(canvas);
+    div.addEventListener('pointerdown', () => selectChoice(div, choice));
+
+    grid.appendChild(div);
+
+    // 차트 렌더링 (다음 frame에서 — 레이아웃 완료 후)
+    requestAnimationFrame(() => {
+      renderPayoffChart(canvas, choice.type, choice.params, {
+        width: chartW, height: chartH,
+        showLabels: true, showBEP: true, highlighted: false,
+      });
+    });
+  });
+}
+
+// ─── 선택 처리 ────────────────────────────────────────────
+function selectChoice(selectedDiv, choice) {
+  if (answered) return;
+  answered = true;
+
+  const isCorrect = choice.isCorrect;
+
+  // 모든 카드 비활성화
+  document.querySelectorAll('.payoff-choice').forEach(div => div.classList.add('disabled'));
+
+  // 선택한 카드 표시
+  selectedDiv.classList.add(isCorrect ? 'correct' : 'wrong');
+
+  // 정답 카드 하이라이트 + highlighted 재렌더링
+  document.querySelectorAll('.payoff-choice').forEach(div => {
+    if (div.dataset.correct === '1' && div !== selectedDiv) {
+      div.classList.add('highlight');
+      // highlighted=true로 차트 재렌더링 — 정답을 굵은 선으로 강조
+      const canvas = div.querySelector('canvas');
+      const idx    = parseInt(div.dataset.idx);
+      const c      = currentChoices[idx];
+      if (c && canvas) {
+        renderPayoffChart(canvas, c.type, c.params, {
+          width: canvas.width, height: canvas.height,
+          showLabels: true, showBEP: true, highlighted: true,
+        });
+      }
+    }
+  });
+
+  // 엔진 기록
+  const { stars } = engine.recordRound({ correct: isCorrect });
+
+  // 피드백 표시
+  const answerName = TYPE_NAMES[currentQ.answer] || currentQ.answer;
+
+  engine.showFeedback({
+    stars,
+    message: isCorrect ? pickMsg('correct') : `정답: ${answerName}`,
+    detail:  currentQ.explanation || '',
+    formula: currentQ.formula || null,
+  });
+
+  // 공식 블록
+  if (currentQ.formula) {
+    const fEl = document.getElementById('feedbackFormula');
+    fEl.textContent    = currentQ.formula;
+    fEl.style.display  = 'block';
+  }
+
+  // 히스토리 바 업데이트
+  engine.renderHistoryBar(document.getElementById('historyBar'));
+
+  // 다음 버튼
+  document.getElementById('nextBtn').classList.add('show');
+}
+
+// ─── 다음 문제 ────────────────────────────────────────────
+function nextQuestion() {
+  engine.hideFeedback();
+  if (engine.isComplete) {
+    engine.renderResultScreen({
+      onHome:  goHome,
+      onRetry: () => location.reload(),
+    });
+  } else {
+    renderQuestion();
+  }
+}
+
+// 시작
+init();
+</script>
+</body>
+</html>
